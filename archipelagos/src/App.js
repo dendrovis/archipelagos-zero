@@ -1,5 +1,7 @@
+import Routes from "./routing/route.js";
+
 function App() {
-  return <div>Hello world</div>;
+  return <Routes></Routes>;
 }
 
 export default App;

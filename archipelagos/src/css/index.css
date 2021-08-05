@@ -1,0 +1,66 @@
+/* Global Default Selector Styling */
+
+:root {
+  background-color: rgb(208, 255, 208);
+}
+
+/* normalize */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-family: museo-sans, "Helvetica Neue", serif;
+  font-size: 6em;
+  letter-spacing: -2px;
+}
+
+img {
+  margin: 0;
+}
+
+h2 {
+  font-family: museo-sans, "Helvetica Neue", serif;
+  font-size: 3em;
+  letter-spacing: -2px;
+  margin: 0;
+}
+
+button {
+  /*-webkit-writing-mode: horizontal-tb !important;*/
+  text-rendering: auto;
+  color: -internal-light-dark(black, white);
+  letter-spacing: normal;
+  word-spacing: normal;
+  text-transform: none;
+  text-indent: 0px;
+  text-shadow: none;
+  text-align: center;
+  cursor: default;
+}
+
+input {
+  border-color: #420303;
+  border-left: white;
+  border-right: white;
+  border-top: white;
+  background-color: transparent;
+  border-radius: 1000px;
+  text-align: center;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 10px #420303;
+}
+
+td {
+  padding: 10px;
+}
+
+tr,
+th {
+  padding: 10px;
+}
