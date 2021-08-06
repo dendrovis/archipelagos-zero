@@ -186,3 +186,8 @@
 .mode_container {
   margin: 40px;
 }
+
+.hiddenbox {
+  font-size: 20px;
+  color: transparent;
+}

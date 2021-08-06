@@ -5,8 +5,14 @@ import Classes from "../css/pages/start.module.css";
 import GlobalClasses from "../css/global.module.css";
 import { IconContext } from "react-icons";
 import { FaRegSun, FaRegQuestionCircle } from "react-icons/fa";
-
+import { iniPlayer } from "../external/api/sessionStorage";
+import { clearAll } from "../external/api/sessionStorage";
 export default function Start() {
+  function start() {
+    clearAll();
+    iniPlayer(false);
+  }
+
   return (
     <div>
       <div>
@@ -23,6 +29,7 @@ export default function Start() {
         <div className={GlobalClasses.buttonContainer}>
           <Link to="/creation">
             <button
+              onClick={start}
               className={
                 GlobalClasses.btnEffect + " " + GlobalClasses.customButton
               }

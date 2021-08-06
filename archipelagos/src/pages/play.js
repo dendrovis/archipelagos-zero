@@ -3,6 +3,7 @@ import Classes from "../css/pages/play.module.css";
 import { Link } from "react-router-dom";
 import GlobalClasses from "../css/global.module.css";
 import { IconContext } from "react-icons";
+import Gamezone from "../components/layout/gamezone";
 import {
   FaRegSun,
   FaRegQuestionCircle,
@@ -10,6 +11,7 @@ import {
   FaRegTimesCircle,
 } from "react-icons/fa";
 import dice1 from "../assets/img/png/dice_1.png";
+import { playerRollDice } from "../engine/game";
 
 export default function Play() {
   return (
@@ -17,9 +19,8 @@ export default function Play() {
       <h1 className={Classes.subtitle + " " + Classes.subtitleContainer}>
         Lost Island
       </h1>
-
       <div className={Classes.canvas_container}>
-        <canvas className={Classes.canvas} width="1000" height="1000" />
+        <Gamezone />
       </div>
 
       <div
@@ -80,11 +81,19 @@ export default function Play() {
         <div className={Classes.info_desc}>Please roll the dice.</div>
       </div>
 
+      <div className={Classes.playerinfo_container}>
+        <div className={Classes.info_effect}>
+          <h3>Name:</h3>
+          <h3>PlayerName</h3>
+        </div>
+        <div className={Classes.rep}></div>
+      </div>
+
       <div className={Classes.scoreboard_container}>
         <FaRegChartBar size={"58px"} className={Classes.scoreboard_icon} />
       </div>
 
-      <div className={Classes.dice_holder}>
+      <div onClick={playerRollDice} className={Classes.dice_holder}>
         <img src={dice1} alt="dice_1.png" />
       </div>
 
@@ -106,30 +115,32 @@ export default function Play() {
         </div>
         <div className={Classes.table_outercontainer}>
           <table className={Classes.table_container}>
-            <tr>
-              <th>Rank</th>
-              <th>Turn</th>
-              <th># of Player</th>
-              <th>Completed Date</th>
-            </tr>
-            <tr>
-              <td>1</td>
-              <td>32</td>
-              <td>1</td>
-              <td>2021-08-06</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>47</td>
-              <td>1</td>
-              <td>2021-08-06</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>29</td>
-              <td>1</td>
-              <td>2021-08-05</td>
-            </tr>
+            <tbody>
+              <tr>
+                <th>Rank</th>
+                <th>Turn</th>
+                <th># of Player</th>
+                <th>Completed Date</th>
+              </tr>
+              <tr>
+                <td>1</td>
+                <td>32</td>
+                <td>1</td>
+                <td>2021-08-06</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>47</td>
+                <td>1</td>
+                <td>2021-08-06</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>29</td>
+                <td>1</td>
+                <td>2021-08-05</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </div>

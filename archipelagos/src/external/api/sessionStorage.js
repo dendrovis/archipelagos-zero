@@ -47,6 +47,23 @@ export function getRecord() {
   }
 }
 
+export function iniPlayer(player) {
+  if (DEBUG) console.log("[Session] Ini Player");
+  sessionStorage.setItem(`player1_id`, "");
+  sessionStorage.setItem(`player1_name`, "");
+  sessionStorage.setItem(`player1_rep`, "");
+  sessionStorage.setItem(`player_mode`, "");
+}
+
+export function setPlayerName(data) {
+  if (DEBUG) console.log("[Session] Set Player Name");
+  sessionStorage.setItem(`player1_name`, `${data}`);
+}
+export function setPlayerRep(data) {
+  if (DEBUG) console.log("[Session] Set Player Rep");
+  sessionStorage.setItem(`player1_rep`, `${data}`);
+}
+
 export function setPlayer(player) {
   if (DEBUG) console.log("[Session] Set Player");
   sessionStorage.setItem(`player${player.id}_id`, `${player.id}`);
@@ -61,6 +78,11 @@ export function getPlayer(id) {
     sessionStorage.getItem(`player${id}_rep`),
     sessionStorage.getItem(`player${id}_id`)
   );
+}
+
+export function iniMode(mode) {
+  if (DEBUG) console.log("[Session] Set Mode");
+  sessionStorage.setItem(`player_mode`, "");
 }
 
 export function setMode(mode) {

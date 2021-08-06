@@ -61,20 +61,20 @@ const DUMMY_PLAYER = {
 
 /// Create Player
 export function createPlayer() {
-  test();
+  //test();
   if (DEBUG) console.log("Created New Player");
 
   const checkPlayer = getPlayer(1);
   const checkMode = getMode();
 
-  /// Verify Inputs
+  /*/// Verify Inputs
   if (
     !checkNull(checkPlayer, checkMode) ||
     !checkValidPlayerName(checkPlayer.name)
   )
     return;
 
-  if (DEBUG) console.log("Verify Success");
+  if (DEBUG) console.log("Verify Success");*/
 
   /// Normalise data
   const playerName = normalisePlayerName(checkPlayer.name);
@@ -116,7 +116,7 @@ function checkNull(player, mode) {
   return true;
 }
 
-function initialize() {
+function initialize(isRender) {
   if (DEBUG) console.log("Initialize");
 
   /// Get Current Player
@@ -155,12 +155,12 @@ function initialize() {
     }
   }
 
-  renderCircle(getPlayerUnitPos(1));
+  if (isRender) renderCircle(getPlayerUnitPos(1));
 }
 
-export function start() {
+export function start(isRender) {
   if (DEBUG) console.log("Start Game");
-  initialize();
+  initialize(isRender);
 }
 
 export function turn() {
