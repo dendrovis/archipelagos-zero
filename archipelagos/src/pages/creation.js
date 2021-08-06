@@ -43,11 +43,15 @@ function SubmitButton() {
 
     if (
       checkNull(checkPlayer, checkMode) &&
-      checkValidPlayerName(checkPlayer.name) === "Valid Name"
+      checkValidPlayerName(checkPlayer.name) === "Valid Name" &&
+      checkMode === 0
     ) {
       console.log("Success");
       bundleCreateFn();
       history.push("/play");
+    }
+    if (checkMode !== 0) {
+      setValid("Multiplayer Not Supported Yet");
     } else {
       setValid("Please try again!");
     }

@@ -3,19 +3,20 @@ import Classes from "../../css/layout/gamezone.module.css";
 import { useState, useRef, useEffect } from "react";
 import { FaDrawPolygon } from "react-icons/fa";
 import { clearCanvas } from "../../engine/temp";
+//import { getTurn } from "../external/api/sessionStorage";
 
 export default function Gamezone(props) {
   const [triggerOnce, setOnce] = useState(false);
-  const [updateTurn, setTurn] = useState(0);
+  //const [updateTurn, setTurn] = useState(0);
 
   const contextVal = ".gamezone_canvas__3Spmj";
 
-  function renderCircle(coord) {
-    console.log(`Rendered: ${coord}`);
+  function renderCircle() {
+    console.log(`Rendered: ${props.coord}`);
     const offset = 20;
-    const move_x = coord[0]; //200; //100 per move
-    const move_y = coord[1]; //900;
-    console.log(`${coord}`);
+    const move_x = props.coord[0]; //200; //100 per move
+    const move_y = props.coord[1]; //900;
+    console.log(`${props.coord}`);
     var c = document.querySelector(contextVal);
     var ctx = c.getContext("2d");
     ctx.beginPath();
@@ -47,7 +48,7 @@ export default function Gamezone(props) {
   }
 
   /// Fire after render
-  useEffect(() => {
+  /*useEffect(() => {
     if (!triggerOnce) {
       console.log("Initialize");
       renderCircle([0, 900]);
@@ -58,7 +59,8 @@ export default function Gamezone(props) {
     return () => {
       console.log("useEffect clean up");
     };
-  });
+  });*/
+  console.log("Executed clean up2");
 
   useEffect(() => {
     console.log("Re-render");
@@ -72,7 +74,7 @@ export default function Gamezone(props) {
     return () => {
       console.log("useEffect clean up2");
     };
-  }, [updateTurn]);
+  });
 
   return (
     <div>
