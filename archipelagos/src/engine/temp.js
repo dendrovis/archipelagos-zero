@@ -116,3 +116,14 @@ export default function DevPage() {
     return <div>No Config?</div>;
   }
 }
+
+export function TestPage() {
+  const obj = new TestClass();
+
+  return <div>Test</div>;
+}
+
+/// test private property and catch proptype with class
+class TestClass {
+  constructor() {}
+}

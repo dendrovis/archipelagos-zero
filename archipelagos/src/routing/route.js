@@ -4,7 +4,7 @@ import { Route, Switch } from "react-router-dom";
 import StartPage from "../pages/start";
 import CreationPage from "../pages/creation";
 import PlayPage from "../pages/play";
-import DevPage from "../engine/temp";
+import DevPage, { TestPage } from "../engine/temp";
 
 export default function Routes() {
   return (
@@ -20,7 +20,7 @@ export default function Routes() {
           <PlayPage />
         </Route>
         <Route path="*">
-          <DevPage />
+          <TestPage />
         </Route>
       </Switch>
     </div>
