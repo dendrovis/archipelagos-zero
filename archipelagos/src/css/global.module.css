@@ -8,125 +8,6 @@
   --debugChild: transparent;
   --debugGrandChild: transparent;
 }
-/* Global Float Button */
-
-.wrapper {
-  display: inline-flex;
-}
-
-.wrapper .icon {
-  position: relative;
-  background-color: #ffffff;
-  border-radius: 50%;
-  padding: 15px;
-  margin: 10px;
-  width: 50px;
-  height: 50px;
-  /*font-size: 18px;*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.wrapper .tooltip {
-  position: absolute;
-  top: 0;
-  font-size: 14px;
-  background-color: #ffffff;
-  color: #ffffff;
-  padding: 5px 8px;
-  border-radius: 5px;
-  box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.wrapper .tooltip::before {
-  position: absolute;
-  content: "";
-  height: 8px;
-  width: 8px;
-  background-color: #ffffff;
-  bottom: -3px;
-  left: 50%;
-  transform: translate(-50%) rotate(45deg);
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-.wrapper .icon:hover .tooltip {
-  font-size: 20px;
-  top: -45px;
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-.wrapper .icon:hover span,
-.wrapper .icon:hover .tooltip {
-  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
-}
-
-.wrapper .help:hover .tooltip,
-.wrapper .help:hover .tooltip::before {
-  background-color: #ff4747;
-  color: #000000;
-}
-
-.customButton {
-  width: 20%;
-  height: 50px;
-  padding: 30px 25px;
-  border: 2px solid #000;
-  /*font-family: "Lato", sans-serif;*/
-  font-weight: 500;
-  font-size: 20px;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  display: inline-block;
-}
-
-.btnEffect {
-  color: #000;
-  line-height: 42px;
-  padding: 0;
-  border: none;
-}
-.btnEffect:hover {
-  background: transparent;
-  color: #420303;
-  /*box-shadow: -7px -7px 20px 0px #fff9, -4px -4px 5px 0px #fff9,
-    7px 7px 20px 0px #0002, 4px 4px 5px 0px #0001;*/
-}
-.btnEffect:before,
-.btnEffect:after {
-  content: "";
-  position: absolute;
-
-  top: 0;
-  right: 0;
-  height: 2px;
-  width: 0;
-  background: #420303;
-  transition: 400ms ease all;
-}
-.btnEffect:after {
-  right: inherit;
-  top: inherit;
-  left: 0;
-  bottom: 0;
-}
-.btnEffect:hover:before,
-.btnEffect:hover:after {
-  width: 100%;
-  transition: 800ms ease all;
-}
 
 .space {
   display: inline-block;
@@ -145,22 +26,6 @@
   text-align: center;
 }
 
-.float_icon_1_container {
-  background-color: var(--debug);
-  position: absolute;
-
-  bottom: 1%;
-  right: 7%;
-}
-
-.float_icon_2_container {
-  background-color: var(--debug);
-  position: absolute;
-
-  bottom: 1%;
-  right: 1%;
-}
-
 .input_container {
   background-color: var(--debug);
   padding: 50px;
@@ -173,21 +38,6 @@
   font-size: 30px;
 }
 
-.input_effect {
-  height: 4vh;
-  font-size: 20px;
-}
-
-.warning_text {
-  font-size: 20px;
-  color: #ff4747;
-}
-
 .mode_container {
   margin: 40px;
-}
-
-.hiddenbox {
-  font-size: 20px;
-  color: transparent;
 }

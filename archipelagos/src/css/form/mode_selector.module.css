@@ -1,0 +1,31 @@
+.defaultImage {
+  filter: grayscale(100%);
+  transition: transform 0.2s;
+  transition-delay: 200ms;
+}
+
+.defaultImage:hover {
+  filter: grayscale(0%);
+  transform: scale(1.1);
+}
+
+.selectedSingle:focus {
+  filter: grayscale(0%);
+}
+
+.selectedMulti:focus {
+  filter: grayscale(0%);
+}
+
+/*
+#single,
+.defaultImage {
+  filter: grayscale(100%);
+  transition: transform 0.2s;
+}
+
+#multi,
+.defaultImage {
+  filter: grayscale(100%);
+  transition: transform 0.2s;
+}*/

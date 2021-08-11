@@ -1,10 +1,16 @@
+/// REACT Package
 import React, { useState, useEffect, useRef } from "react";
-import Classes from "../css/pages/play.module.css";
-import { Link } from "react-router-dom";
-import GlobalClasses from "../css/global.module.css";
-import { IconContext } from "react-icons";
-import Gamezone from "../components/layout/gamezone";
 import { useHistory } from "react-router-dom";
+import { IconContext } from "react-icons";
+
+/// Styling
+import Classes from "../css/pages/play.module.css";
+import GlobalClasses from "../css/global.module.css";
+
+import { Link } from "react-router-dom";
+
+import Gamezone from "../components/layout/gamezone";
+
 import {
   FaRegSun,
   FaRegQuestionCircle,
@@ -20,6 +26,21 @@ import {
   getPlayerUnitPos,
   getPlayerCellPos,
 } from "../external/api/sessionStorage";
+
+/// Asset Package
+import * as IMAGE from "../assets/img/index";
+
+/// Storage Control
+import * as Storage from "../external/api/sessionStorage";
+
+/// Component Package
+import * as Component from "../components/component";
+
+/// Static Package
+import * as STATIC from "../static/_export";
+
+/// DEBUG
+import * as DEV from "../config/debug";
 
 function GameOverOverlay() {
   return (
@@ -237,57 +258,14 @@ export default function Play() {
       </h1>
 
       <GameBoardController />
-      <div
-        className={
-          GlobalClasses.wrapper +
-          " " +
-          GlobalClasses.float_icon_1_container +
-          " " +
-          Classes.sticky_float
-        }
-      >
-        <div className={GlobalClasses.icon + " " + GlobalClasses.help}>
-          <div className={GlobalClasses.tooltip}>help</div>
-          <span>
-            {
-              //<IconContext.Provider value={{ color: "grey" }}>
-            }
-            <div>
-              <FaRegQuestionCircle
-                size={"38px"}
-                className={Classes.float_icon_1}
-              />
-            </div>
-            {
-              //</IconContext.Provider>
-            }
-          </span>
-        </div>
-      </div>
-      <div
-        className={
-          GlobalClasses.wrapper +
-          " " +
-          GlobalClasses.float_icon_2_container +
-          " " +
-          Classes.sticky_float
-        }
-      >
-        <div className={GlobalClasses.icon + " " + GlobalClasses.help}>
-          <div className={GlobalClasses.tooltip}>settings</div>
-          <span>
-            {
-              //<IconContext.Provider value={{ color: "grey" }}>
-            }
-            <div>
-              <FaRegSun size={"35px"} />
-            </div>
-            {
-              //</IconContext.Provider>
-            }
-          </span>
-        </div>
-      </div>
+      <Component.Button.Help
+        tooltip={STATIC.DATA.GLOBAL_HELP_TOOLTIP}
+        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
+      />
+      <Component.Button.Settings
+        tooltip={STATIC.DATA.GLOBAL_SETTINGS_TOOLTIP}
+        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
+      />
 
       <ScoreBoardController />
       <div className={Classes.playerinfo_container}>

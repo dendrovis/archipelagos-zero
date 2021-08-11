@@ -28,3 +28,6 @@ export const SHOW_SETTINGS = "SHOW_SETTINGS";
 export const SHOW_LOADING = "SHOW_LOADING";
 export const SHOW_ERROR = "SHOW_ERROR";
 export const CLOSE_OVERLAY = "CLOSE_OVERLAY";
+
+/// SCALING (STRING VALUE ONLY)
+export const SCALE_FLOAT_ICON = "38";

@@ -1,10 +1,10 @@
 /// START PAGE
-export const START_PAGE_TITLE = "The Archipelagos";
-export const START_PAGE_SUBTITLE = "Ladder & Snake Game";
+export const START_PAGE_TITLE = "Archipelagos";
+export const START_PAGE_SUBTITLE = "Snake & Ladder Game";
 export const START_PAGE_BTNTEXT = "Start Game";
 
 /// CREATION PAGE
-export const CREATION_PAGE_TITLE = "The Archipelagos";
+export const CREATION_PAGE_TITLE = "Creation";
 export const CREATION_PAGE_SUBTITLE_1 = "Player Name";
 export const CREATION_PAGE_SUBTITLE_2 = "Player Mode";
 export const CREATION_PAGE_SUBTITLE_3 = "Player Representor";
@@ -52,12 +52,13 @@ export const GLOBAL_HELP_DESC_7 =
 export const GLOBAL_HELP_DESC_8 =
   "Once any of the player has reach the last cell of the game, it is game over!";
 export const GLOBAL_HELP_DESC_9 = "Restart or end the game!";
+export const GLOBAL_HELP_TOOLTIP = "help";
 
 /// - [SETTINGS]
 export const GLOBAL_SETTINGS_TITLE = "Settings";
 export const GLOBAL_SETTINGS_SUBTITLE_1 = "Dark Mode";
 export const GLOBAL_SETTINGS_SUBTITLE_2 = "Light Mode";
-export const GLOBAL_SETTINGS_TOOLTIP = "Settings";
+export const GLOBAL_SETTINGS_TOOLTIP = "settings";
 
 /// - [ERROR]
 export const GLOBAL_ERROR_SUBTITLE = "#PlaceHolder";

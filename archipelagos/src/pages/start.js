@@ -1,87 +1,93 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import image from "../assets/img/png/logo.png";
+/// REACT Package
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+
+/// Asset Package
+import * as IMAGE from "../assets/img/index";
+
+/// Styling
 import Classes from "../css/pages/start.module.css";
 import GlobalClasses from "../css/global.module.css";
-import { IconContext } from "react-icons";
-import { FaRegSun, FaRegQuestionCircle } from "react-icons/fa";
-import { iniPlayer } from "../external/api/sessionStorage";
-import { clearAll } from "../external/api/sessionStorage";
+
+/// Storage Control
+import * as Storage from "../external/api/sessionStorage";
+
+/// Component Package
+import * as Component from "../components/component";
+
+/// Static Package
+import * as STATIC from "../static/_export";
+
+/// DEBUG
+import * as DEV from "../config/debug";
+
 export default function Start() {
-  function start() {
-    clearAll();
-    iniPlayer(false);
+  const history = useHistory(); // Create router as object
+
+  /// Execute after render finish
+  useEffect(() => {
+    Storage.clearAll();
+    if (DEV.DEBUG) console.log("[useEffect] Initialize");
+  }, []); //[] run one time since did'nt find any var to update
+
+  /// Navigation to Next Page
+  function goCreation() {
+    if (DEV.DEBUG) console.log("[onClick] Go to Creation Page");
+    history.push("/creation");
   }
 
   return (
-    <div>
-      <div>
-        <div className={Classes.logoContainer}>
-          <img className={Classes.logo} src={image} alt="archipelogos.png" />
-        </div>
-        <h1 className={Classes.title + " " + Classes.titleContainer}>
-          Archipelagos
-        </h1>
-        <h2 className={Classes.subtitle + " " + Classes.subtitleContainer}>
-          Snake {"&"} Ladder Game
-        </h2>
+    <>
+      <>
+        <CoverSection />
         <div className={GlobalClasses.space}></div>
-        <div className={GlobalClasses.buttonContainer}>
-          <Link to="/creation">
-            <button
-              onClick={start}
-              className={
-                GlobalClasses.btnEffect + " " + GlobalClasses.customButton
-              }
-            >
-              Start Game
-            </button>
-          </Link>
-        </div>
+        <ActionSection event={goCreation} />
+      </>
+      <>
+        <OverlaySection />
+      </>
+    </>
+  );
+}
+
+function CoverSection() {
+  return (
+    <div>
+      <div className={Classes.logoContainer}>
+        <img className={Classes.logo} src={IMAGE.LOGO} alt={IMAGE.ALT_LOGO} />
       </div>
-      <div
-        className={
-          GlobalClasses.wrapper + " " + GlobalClasses.float_icon_1_container
-        }
-      >
-        <div className={GlobalClasses.icon + " " + GlobalClasses.help}>
-          <div className={GlobalClasses.tooltip}>help</div>
-          <span>
-            {
-              //<IconContext.Provider value={{ color: "grey" }}>
-            }
-            <div>
-              <FaRegQuestionCircle
-                size={"38px"}
-                className={Classes.float_icon_1}
-              />
-            </div>
-            {
-              //</IconContext.Provider>
-            }
-          </span>
-        </div>
-      </div>
-      <div
-        className={
-          GlobalClasses.wrapper + " " + GlobalClasses.float_icon_2_container
-        }
-      >
-        <div className={GlobalClasses.icon + " " + GlobalClasses.help}>
-          <div className={GlobalClasses.tooltip}>settings</div>
-          <span>
-            {
-              //<IconContext.Provider value={{ color: "grey" }}>
-            }
-            <div>
-              <FaRegSun size={"35px"} />
-            </div>
-            {
-              //</IconContext.Provider>
-            }
-          </span>
-        </div>
-      </div>
+      <h1 className={Classes.title + " " + Classes.titleContainer}>
+        {STATIC.DATA.START_PAGE_TITLE}
+      </h1>
+      <h2 className={Classes.subtitle + " " + Classes.subtitleContainer}>
+        {STATIC.DATA.START_PAGE_SUBTITLE}
+      </h2>
     </div>
+  );
+}
+
+function ActionSection(props) {
+  return (
+    <div className={GlobalClasses.buttonContainer}>
+      <Component.Button.Text
+        event={props.event}
+        text={STATIC.DATA.START_PAGE_BTNTEXT}
+      />
+    </div>
+  );
+}
+
+function OverlaySection() {
+  return (
+    <>
+      <Component.Button.Help
+        tooltip={STATIC.DATA.GLOBAL_HELP_TOOLTIP}
+        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
+      />
+      <Component.Button.Settings
+        tooltip={STATIC.DATA.GLOBAL_SETTINGS_TOOLTIP}
+        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
+      />
+    </>
   );
 }

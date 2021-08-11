@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+/// REACT Package
+import React, { useState, useEffect, useRef, useContext } from "react";
+import { useHistory } from "react-router-dom";
+
+/// Styling
 import Classes from "../css/pages/creation.module.css";
 import GlobalClasses from "../css/global.module.css";
+
 import { IconContext } from "react-icons";
 import { FaRegSun, FaRegQuestionCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import multi_mode_img from "../assets/img/png/multiplayer.png";
 import single_mode_img from "../assets/img/png/singleplayer.png";
 import { createPlayer, start } from "../engine/game";
-import { useHistory } from "react-router-dom";
+
 import {
   setPlayer,
   setPlayerName,
@@ -16,6 +21,21 @@ import {
   getMode,
   getPlayer,
 } from "../external/api/sessionStorage";
+
+/// Asset Package
+import * as IMAGE from "../assets/img/index";
+
+/// Storage Control
+import * as Storage from "../external/api/sessionStorage";
+
+/// Component Package
+import * as Component from "../components/component";
+
+/// Static Package
+import * as STATIC from "../static/_export";
+
+/// DEBUG
+import * as DEV from "../config/debug";
 
 function bundleCreateFn() {
   createPlayer();
@@ -31,58 +51,6 @@ function checkNull(player, mode) {
   if (mode === -1) return false;
   console.log("Pass");
   return true;
-}
-
-function SubmitButton() {
-  const history = useHistory();
-  const [validPlayer, setValid] = useState("hidden");
-
-  function validate() {
-    const checkPlayer = getPlayer(1);
-    const checkMode = getMode();
-
-    if (
-      checkNull(checkPlayer, checkMode) &&
-      checkValidPlayerName(checkPlayer.name) === "Valid Name" &&
-      checkMode === 0
-    ) {
-      console.log("Success");
-      bundleCreateFn();
-      history.push("/play");
-    }
-    if (checkMode !== 0) {
-      setValid("Multiplayer Not Supported Yet");
-    } else {
-      setValid("Please try again!");
-    }
-  }
-
-  if (validPlayer !== "hidden")
-    return (
-      <div className={GlobalClasses.buttonContainer}>
-        <button
-          onClick={validate}
-          className={GlobalClasses.btnEffect + " " + GlobalClasses.customButton}
-        >
-          Play
-        </button>
-
-        <div className={GlobalClasses.warning_text}>{validPlayer}</div>
-      </div>
-    );
-
-  return (
-    <div className={GlobalClasses.buttonContainer}>
-      <button
-        onClick={validate}
-        className={GlobalClasses.btnEffect + " " + GlobalClasses.customButton}
-      >
-        Play
-      </button>
-
-      <div className={GlobalClasses.hiddenbox}>{validPlayer}</div>
-    </div>
-  );
 }
 
 function SelectPlayerRep() {
@@ -121,181 +89,163 @@ function SelectPlayerRep() {
   );
 }
 
-function checkValidPlayerName(data) {
-  /// check for empty data
-  if (data.length === 0) return "hidden";
-  /// a digit exist , 17 words exist , space exist, non-alpha-digit exist
-  if (/\d|^\w{17}|\s|[^\w]/.test(data) === true) return "Please try again!";
-  return "Valid Name";
-}
+let iniField = {
+  playerName: "",
+  playerMode: -1,
+  playerRep: -1,
+};
 
-function SelectPlayerMode() {
-  function selectedMode(e) {
-    //document.querySelector(`.${e.target.className}`).style.filter =
-    //"grayscale(0)";
-    if (e.target.alt === "single_player.png") {
-      setMode(0);
+//const PlayerNameContext = React.createContext();
+//export { PlayerNameContext };
+
+export default function Creation() {
+  //const inputField = useContext(2);
+  //const inputField = useRef(inputIni);
+  //let inputField;
+  //const [inputField, setInputUpdate] = useState(inputIni);
+  const inputField = iniField; // Singleton Object
+
+  /*useEffect(() => {
+    if (update === 0) {
+      if (DEV.DEBUG) console.log("Initialize");
+      inputField = inputIni;
     }
-    if (e.target.alt === "multi_player.png") {
-      setMode(1);
-    }
-
-    /*console.log(
-      document.querySelector(`.${e.target.classList}`).style.filter = grayscale(0%);
-    );*/
-
-    console.log(e.target.className);
-  }
+    if (DEV.DEBUG) console.log(inputField);
+  }, [update]);*/
+  if (DEV.DEBUG) console.log("Initialize");
+  if (DEV.DEBUG) console.log(inputField);
 
   return (
-    <div className={Classes.subsubtitleContainer}>
-      <span className={Classes.imageAnchor}>
-        <img
-          id="single"
-          onClick={selectedMode}
-          className={Classes.defaultImage}
-          src={single_mode_img}
-          alt="single_player.png"
-        />
-      </span>
-      <span className={Classes.imageAnchor}>
-        <img
-          id="multi"
-          onClick={selectedMode}
-          className={Classes.defaultImage}
-          src={multi_mode_img}
-          alt="multi_player.png"
-        />
-      </span>
+    <>
+      <>
+        <TitleSection />
+        <div className={GlobalClasses.input_container}>
+          <PlayerNameSection input={inputField} />
+
+          <PlayerModeSection />
+
+          <PlayerRepresentorSection />
+        </div>
+        <ActionSection />
+      </>
+      <>
+        <OverlaySection />
+      </>
+    </>
+  );
+}
+
+function TitleSection() {
+  return (
+    <div>
+      <h1 className={Classes.subtitle + " " + Classes.subtitleContainer}>
+        {STATIC.DATA.CREATION_PAGE_TITLE}
+      </h1>
     </div>
   );
 }
 
-function TextBox() {
-  const [playerName, setName] = useState("hidden");
-  function textHandler(e) {
-    /// check for validation
-    const validStatus = checkValidPlayerName(e.target.value);
-    /// save into session if valid
-    validStatus === "Valid Name"
-      ? setPlayerName(e.target.value)
-      : setPlayerName("");
+function OverlaySection() {
+  return (
+    <>
+      <Component.Button.Help
+        tooltip={STATIC.DATA.GLOBAL_HELP_TOOLTIP}
+        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
+      />
+      <Component.Button.Settings
+        tooltip={STATIC.DATA.GLOBAL_SETTINGS_TOOLTIP}
+        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
+      />
+    </>
+  );
+}
 
-    setName(validStatus);
+function PlayerNameSection(props) {
+  return (
+    <>
+      <div className={GlobalClasses.expand}>
+        <label htmlFor="playername" className={GlobalClasses.label}>
+          {STATIC.DATA.CREATION_PAGE_SUBTITLE_1}
+        </label>
+      </div>
+      <Component.Textbox.PlayerName input={props.input} />
+    </>
+  );
+}
+
+function PlayerModeSection() {
+  return (
+    <div className={GlobalClasses.mode_container}>
+      <div>
+        <label className={GlobalClasses.wrapper + " " + GlobalClasses.label}>
+          {STATIC.DATA.CREATION_PAGE_SUBTITLE_2}
+        </label>
+      </div>
+      {/*<div className={Classes.subsubtitleContainer}>
+        <span className={Classes.tooltip}>{STATIC.DATA.CREA}</span>
+        <span className={Classes.tooltip}>Multi Player</span>
+      </div>*/}
+      <div className={Classes.subsubtitleContainer}>
+        <Component.Form.ModeSelector />
+      </div>
+    </div>
+  );
+}
+
+function PlayerRepresentorSection() {
+  return <div></div>;
+}
+
+function ActionSection() {
+  const history = useHistory();
+  const [validPlayer, setValid] = useState("hidden");
+
+  function validate() {
+    const checkPlayer = getPlayer(1);
+    const checkMode = getMode();
+
+    if (
+      checkNull(checkPlayer, checkMode) &&
+      //checkValidPlayerName(checkPlayer.name) === "Valid Name" &&
+      checkMode === 0
+    ) {
+      console.log("Success");
+      bundleCreateFn();
+      history.push("/play");
+    }
+    if (checkMode !== 0) {
+      setValid("Multiplayer Not Supported Yet");
+    } else {
+      setValid("Please try again!");
+    }
   }
 
-  if (playerName !== "hidden")
+  if (validPlayer !== "hidden")
     return (
-      <div>
-        <input
-          onChange={textHandler}
-          id="playername"
-          className={GlobalClasses.input_effect}
-          type="text"
-          placeholder=""
-        />
-        <div className={GlobalClasses.warning_text}>{playerName}</div>
+      <div className={GlobalClasses.buttonContainer}>
+        <button
+          onClick={validate}
+          className={GlobalClasses.btnEffect + " " + GlobalClasses.customButton}
+        >
+          Play
+        </button>
+
+        <div className={GlobalClasses.warning_text}>{validPlayer}</div>
+        <SelectPlayerRep />
       </div>
     );
 
   return (
-    <div>
-      <input
-        onChange={textHandler}
-        id="playername"
-        className={GlobalClasses.input_effect}
-        type="text"
-        placeholder=""
-      />
-
-      <div className={GlobalClasses.hiddenbox}>hidden</div>
-    </div>
-  );
-}
-
-export default function Creation() {
-  return (
-    <div>
-      <div>
-        <h1 className={Classes.subtitle + " " + Classes.subtitleContainer}>
-          Creation
-        </h1>
-      </div>
-      {
-        //====================Content=================================
-      }
-      <div className={GlobalClasses.input_container}>
-        <div className={GlobalClasses.expand}>
-          <label htmlFor="playername" className={GlobalClasses.label}>
-            Player Name
-          </label>
-        </div>
-        <TextBox />
-        <div className={GlobalClasses.mode_container}>
-          <div>
-            <label
-              className={GlobalClasses.wrapper + " " + GlobalClasses.label}
-            >
-              Player Mode
-            </label>
-          </div>
-          <div className={Classes.subsubtitleContainer}>
-            <span className={Classes.tooltip}>Single Player</span>
-            <span className={Classes.tooltip}>Multi Player</span>
-          </div>
-          <SelectPlayerMode />
-        </div>
-        <SelectPlayerRep />
-      </div>
-
-      {
-        //============================================================
-      }
-      <SubmitButton />
-
-      <div
-        className={
-          GlobalClasses.wrapper + " " + GlobalClasses.float_icon_1_container
-        }
+    <div className={GlobalClasses.buttonContainer}>
+      <button
+        onClick={validate}
+        className={GlobalClasses.btnEffect + " " + GlobalClasses.customButton}
       >
-        <div className={GlobalClasses.icon + " " + GlobalClasses.help}>
-          <div className={GlobalClasses.tooltip}>help</div>
-          <span>
-            {
-              //<IconContext.Provider value={{ color: "grey" }}>
-            }
-            <div>
-              <FaRegQuestionCircle
-                size={"38px"}
-                className={Classes.float_icon_1}
-              />
-            </div>
-            {
-              //</IconContext.Provider>
-            }
-          </span>
-        </div>
-      </div>
-      <div
-        className={
-          GlobalClasses.wrapper + " " + GlobalClasses.float_icon_2_container
-        }
-      >
-        <div className={GlobalClasses.icon + " " + GlobalClasses.help}>
-          <div className={GlobalClasses.tooltip}>settings</div>
-          <span>
-            {
-              //<IconContext.Provider value={{ color: "grey" }}>
-            }
-            <div>
-              <FaRegSun size={"35px"} />
-            </div>
-            {
-              //</IconContext.Provider>
-            }
-          </span>
-        </div>
-      </div>
+        Play
+      </button>
+
+      <div className={GlobalClasses.hiddenbox}>{validPlayer}</div>
+      <SelectPlayerRep />
     </div>
   );
 }

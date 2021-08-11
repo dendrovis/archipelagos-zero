@@ -1,0 +1,14 @@
+.input_effect {
+  height: 4vh;
+  font-size: 20px;
+}
+
+.warning_text {
+  font-size: 20px;
+  color: #ff4747;
+}
+
+.hiddenbox {
+  font-size: 20px;
+  color: transparent;
+}
