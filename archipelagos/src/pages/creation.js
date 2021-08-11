@@ -122,7 +122,7 @@ export default function Creation() {
         <div className={GlobalClasses.input_container}>
           <PlayerNameSection input={inputField} />
 
-          <PlayerModeSection />
+          <PlayerModeSection input={inputField} />
 
           <PlayerRepresentorSection />
         </div>
@@ -173,7 +173,7 @@ function PlayerNameSection(props) {
   );
 }
 
-function PlayerModeSection() {
+function PlayerModeSection(props) {
   return (
     <div className={GlobalClasses.mode_container}>
       <div>
@@ -186,7 +186,7 @@ function PlayerModeSection() {
         <span className={Classes.tooltip}>Multi Player</span>
       </div>*/}
       <div className={Classes.subsubtitleContainer}>
-        <Component.Form.ModeSelector />
+        <Component.Form.ModeSelector input={props.input} />
       </div>
     </div>
   );
