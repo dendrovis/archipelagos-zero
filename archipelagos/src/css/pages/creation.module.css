@@ -33,36 +33,3 @@
 .tooltip {
   font-size: 20px;
 }
-
-.rep {
-  margin-top: 40px;
-  margin-left: 20px;
-  margin-right: 20px;
-  height: 40px;
-  width: 40px;
-  /*background-color: #bbb;*/
-  border-radius: 50%;
-  display: inline-block;
-}
-
-.rep_1 {
-  background-color: lightpink;
-  transition: transform 0.2s;
-}
-
-.rep:hover {
-  transform: scale(1.5);
-}
-.rep_2 {
-  background-color: lightgreen;
-  transition: transform 0.2s;
-}
-
-.rep_3 {
-  background-color: lightblue;
-  transition: transform 0.2s;
-}
-.rep_4 {
-  background-color: lightsalmon;
-  transition: transform 0.2s;
-}

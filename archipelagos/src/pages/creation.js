@@ -1,29 +1,10 @@
 /// REACT Package
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 /// Styling
 import Classes from "../css/pages/creation.module.css";
 import GlobalClasses from "../css/global.module.css";
-
-import { IconContext } from "react-icons";
-import { FaRegSun, FaRegQuestionCircle } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import multi_mode_img from "../assets/img/png/multiplayer.png";
-import single_mode_img from "../assets/img/png/singleplayer.png";
-import { createPlayer, start } from "../engine/game";
-
-import {
-  setPlayer,
-  setPlayerName,
-  setPlayerRep,
-  setMode,
-  getMode,
-  getPlayer,
-} from "../external/api/sessionStorage";
-
-/// Asset Package
-import * as IMAGE from "../assets/img/index";
 
 /// Storage Control
 import * as Storage from "../external/api/sessionStorage";
@@ -37,81 +18,11 @@ import * as STATIC from "../static/_export";
 /// DEBUG
 import * as DEV from "../config/debug";
 
-function bundleCreateFn() {
-  createPlayer();
-  start(false);
-}
-
-function checkNull(player, mode) {
-  console.log(`${player.rep}  || ${mode}`);
-  if (player.name === "") return false;
-  console.log("Pass");
-  if (player.rep === "") return false;
-  console.log("Pass");
-  if (mode === -1) return false;
-  console.log("Pass");
-  return true;
-}
-
-function SelectPlayerRep() {
-  function selectedRep(e) {
-    setPlayerRep(e.target.id);
-  }
-
-  return (
-    <div>
-      <label className={GlobalClasses.wrapper + " " + GlobalClasses.label}>
-        Player Represent
-      </label>
-      <div>
-        <span
-          id="0"
-          onClick={selectedRep}
-          className={Classes.rep + " " + Classes.rep_1}
-        />
-        <span
-          id="1"
-          onClick={selectedRep}
-          className={Classes.rep + " " + Classes.rep_2}
-        />
-        <span
-          id="2"
-          onClick={selectedRep}
-          className={Classes.rep + " " + Classes.rep_3}
-        />
-        <span
-          id="3"
-          onClick={selectedRep}
-          className={Classes.rep + " " + Classes.rep_4}
-        />
-      </div>
-    </div>
-  );
-}
-
-let iniField = {
-  playerName: "",
-  playerMode: -1,
-  playerRep: -1,
-};
-
-//const PlayerNameContext = React.createContext();
-//export { PlayerNameContext };
+/// Logic
+import * as Logic from "../engine/_export";
 
 export default function Creation() {
-  //const inputField = useContext(2);
-  //const inputField = useRef(inputIni);
-  //let inputField;
-  //const [inputField, setInputUpdate] = useState(inputIni);
-  const inputField = iniField; // Singleton Object
-
-  /*useEffect(() => {
-    if (update === 0) {
-      if (DEV.DEBUG) console.log("Initialize");
-      inputField = inputIni;
-    }
-    if (DEV.DEBUG) console.log(inputField);
-  }, [update]);*/
+  const inputField = Logic.field.iniField; // Singleton Object
   if (DEV.DEBUG) console.log("Initialize");
   if (DEV.DEBUG) console.log(inputField);
 
@@ -121,12 +32,10 @@ export default function Creation() {
         <TitleSection />
         <div className={GlobalClasses.input_container}>
           <PlayerNameSection input={inputField} />
-
           <PlayerModeSection input={inputField} />
-
-          <PlayerRepresentorSection />
+          <PlayerRepresentorSection input={inputField} />
         </div>
-        <ActionSection />
+        <ActionSection input={inputField} />
       </>
       <>
         <OverlaySection />
@@ -181,10 +90,6 @@ function PlayerModeSection(props) {
           {STATIC.DATA.CREATION_PAGE_SUBTITLE_2}
         </label>
       </div>
-      {/*<div className={Classes.subsubtitleContainer}>
-        <span className={Classes.tooltip}>{STATIC.DATA.CREA}</span>
-        <span className={Classes.tooltip}>Multi Player</span>
-      </div>*/}
       <div className={Classes.subsubtitleContainer}>
         <Component.Form.ModeSelector input={props.input} />
       </div>
@@ -192,60 +97,57 @@ function PlayerModeSection(props) {
   );
 }
 
-function PlayerRepresentorSection() {
-  return <div></div>;
+function PlayerRepresentorSection(props) {
+  return (
+    <>
+      <label className={GlobalClasses.wrapper + " " + GlobalClasses.label}>
+        Player Represent
+      </label>
+      <Component.Form.Representor input={props.input} />
+    </>
+  );
 }
 
-function ActionSection() {
+function ActionSection(props) {
   const history = useHistory();
   const [validPlayer, setValid] = useState("hidden");
 
   function validate() {
-    const checkPlayer = getPlayer(1);
-    const checkMode = getMode();
-
     if (
-      checkNull(checkPlayer, checkMode) &&
-      //checkValidPlayerName(checkPlayer.name) === "Valid Name" &&
-      checkMode === 0
+      Logic.validation.checkNull(props.input) &&
+      Logic.validation.checkValidPlayerName(props.input.playerName) ===
+        "Valid Name" &&
+      props.input.playerMode === 0
     ) {
-      console.log("Success");
-      bundleCreateFn();
-      history.push("/play");
+      if (DEV.DEBUG) console.log("Success");
+      props.input.playerName = Logic.validation.normalisePlayerName(
+        props.input.playerName
+      );
+      const initialVal = props.input;
+      history.push({ pathname: "/play", state: initialVal });
     }
-    if (checkMode !== 0) {
+    if (props.input.playerMode === 1) {
+      if (DEV.DEBUG) console.log("In-Prog");
       setValid("Multiplayer Not Supported Yet");
     } else {
+      if (DEV.DEBUG) console.log("Fail");
       setValid("Please try again!");
     }
   }
 
-  if (validPlayer !== "hidden")
-    return (
-      <div className={GlobalClasses.buttonContainer}>
-        <button
-          onClick={validate}
-          className={GlobalClasses.btnEffect + " " + GlobalClasses.customButton}
-        >
-          Play
-        </button>
-
-        <div className={GlobalClasses.warning_text}>{validPlayer}</div>
-        <SelectPlayerRep />
-      </div>
-    );
-
   return (
-    <div className={GlobalClasses.buttonContainer}>
-      <button
-        onClick={validate}
-        className={GlobalClasses.btnEffect + " " + GlobalClasses.customButton}
-      >
-        Play
-      </button>
-
-      <div className={GlobalClasses.hiddenbox}>{validPlayer}</div>
-      <SelectPlayerRep />
-    </div>
+    <>
+      <div className={GlobalClasses.buttonContainer}>
+        <Component.Button.Text
+          event={validate}
+          text={STATIC.DATA.CREATION_PAGE_BTNTEXT}
+        />
+        {validPlayer !== "hidden" ? (
+          <div className={GlobalClasses.warning_text}>{validPlayer}</div>
+        ) : (
+          <></>
+        )}
+      </div>
+    </>
   );
 }

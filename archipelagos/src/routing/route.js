@@ -16,7 +16,7 @@ export default function Routes() {
         <Route path="/creation">
           <CreationPage />
         </Route>
-        <Route path="/play">
+        <Route path="/play" location={{ id: "" }}>
           <PlayPage />
         </Route>
         <Route path="*">

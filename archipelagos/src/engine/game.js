@@ -19,6 +19,9 @@ import {
 import { DEBUG } from "../config/debug";
 import { renderCircle } from "./temp";
 
+/// Asset Package
+import * as IMAGE from "../assets/img/index";
+
 export const createRecord = {};
 /*
 initialize.prototype = {
@@ -366,3 +369,56 @@ function jumpRule(id, cellPos) {
 }
 
 export { moveUnit };
+
+//!===========================================================
+
+export const iniGameData = {
+  unitPos: [-1, -1],
+  cellPos: 0,
+  offset: [-1, -1],
+  playerCount: -1,
+  dice1: -1,
+  dice2: -1,
+  dice3: -1,
+  dice4: -1,
+  player1Name: "no_name",
+  player2Name: "no_name",
+  player3Name: "no_name",
+  player4Name: "no_name",
+  player1Rep: "no_rep",
+  player2Rep: "no_rep",
+  player3Rep: "no_rep",
+  player4Rep: "no_rep",
+  scoreList: [],
+  turns: 0,
+};
+
+export const getDiceData = {
+  ini: randomDiceValue(),
+  data: [
+    IMAGE.DICE_1_1,
+    IMAGE.DICE_1_2,
+    IMAGE.DICE_1_3,
+    IMAGE.DICE_1_4,
+    IMAGE.DICE_1_5,
+    IMAGE.DICE_1_6,
+  ],
+  meta: [
+    IMAGE.ALT_DICE_1_1,
+    IMAGE.ALT_DICE_1_2,
+    IMAGE.ALT_DICE_1_3,
+    IMAGE.ALT_DICE_1_4,
+    IMAGE.ALT_DICE_1_5,
+    IMAGE.ALT_DICE_1_6,
+  ],
+};
+
+function randomDiceValue() {
+  const min = 0;
+  const max = 5;
+  const val = Math.floor(Math.random() * max + min);
+  console.log(`Roll Value: ${val + 1}`);
+  return val;
+}
+
+export { randomDiceValue };

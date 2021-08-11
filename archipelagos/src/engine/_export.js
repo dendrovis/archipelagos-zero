@@ -3,4 +3,4 @@ import * as player from "./player";
 import * as validation from "./validation";
 import * as field from "./fields";
 
-export { game, player, validation };
+export { game, player, validation, field };

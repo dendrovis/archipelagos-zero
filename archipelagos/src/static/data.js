@@ -24,10 +24,10 @@ export const CREATION_PAGE_TOOLTIP_6 = "Yellow";
 export const CREATION_PAGE_TOOLTIP_7 = "Random Name";
 
 /// PLAY PAGE
+export const PLAY_PAGE_TITLE = "Lost Island";
 export const PLAY_PAGE_TOOLTIP_1 = "Dice";
 export const PLAY_PAGE_TOOLTIP_2 = "Scoreboard";
 export const PLAY_PAGE_TOOLTIP_3 = "Exit";
-export const PLAY_PAGE_TOOLTIP_SUBTITLE = "Unknown Island";
 export const PLAY_PAGE_TOOLTIP_DESC_1 = "# turn to roll the dice!";
 export const PLAY_PAGE_TOOLTIP_DESC_2 = "# rolling the dice!";
 export const PLAY_PAGE_TOOLTIP_DESC_3 = "rolled # step!";
