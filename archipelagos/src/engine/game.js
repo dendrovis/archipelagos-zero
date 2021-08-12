@@ -22,6 +22,9 @@ import { renderCircle } from "./temp";
 /// Asset Package
 import * as IMAGE from "../assets/img/index";
 
+/// DEBUG
+import * as DEV from "../config/debug";
+
 export const createRecord = {};
 /*
 initialize.prototype = {
@@ -373,10 +376,10 @@ export { moveUnit };
 //!===========================================================
 
 export const iniGameData = {
-  unit1Pos: [-1, -1],
-  unit2Pos: [-1, -1],
-  unit3Pos: [-1, -1],
-  unit4Pos: [-1, -1],
+  unit1Pos: [1, 10],
+  unit2Pos: [1, 10],
+  unit3Pos: [1, 10],
+  unit4Pos: [1, 10],
   cell1Pos: 0,
   cell2Pos: 0,
   cell3Pos: 0,
@@ -387,14 +390,14 @@ export const iniGameData = {
   dice2: -1,
   dice3: -1,
   dice4: -1,
-  player1Name: "no_name",
-  player2Name: "no_name",
-  player3Name: "no_name",
-  player4Name: "no_name",
-  player1Rep: "no_rep",
-  player2Rep: "no_rep",
-  player3Rep: "no_rep",
-  player4Rep: "no_rep",
+  player1Name: "Player 1",
+  player2Name: "Player 2",
+  player3Name: "Player 3",
+  player4Name: "Player 4",
+  player1Rep: -1,
+  player2Rep: -1,
+  player3Rep: -1,
+  player4Rep: -1,
   scoreList: [],
   turns: 0,
 };
@@ -428,3 +431,38 @@ function randomDiceValue() {
 }
 
 export { randomDiceValue };
+
+export function fixedJumpCells() {
+  /// start to end
+  return [
+    [3, 51],
+    [6, 27],
+    [20, 70],
+    [25, 5],
+    [34, 1],
+    [36, 55],
+    [47, 19],
+    [63, 95],
+    [65, 52],
+    [68, 98],
+    [87, 57],
+    [91, 61],
+    [99, 69],
+  ];
+}
+
+export function convertCellListtoBoardPos(dataList) {
+  const newArr = [];
+  dataList.forEach((coord) => {
+    const tempArrS = [];
+    const tempArrE = [];
+    tempArrS.push((coord[0] - 1) % 10);
+    tempArrS.push(10 - Math.ceil(coord[0] / 10));
+    tempArrE.push((coord[1] - 1) % 10);
+    tempArrE.push(10 - Math.ceil(coord[1] / 10));
+    newArr.push([tempArrS, tempArrE]);
+  });
+  if (DEV.DEBUG) console.log(`Converted: ${newArr}`);
+
+  return newArr;
+}

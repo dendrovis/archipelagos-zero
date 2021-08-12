@@ -83,13 +83,18 @@
 
 .dice_holder {
   position: absolute;
-  top: 70%;
-  left: 1%;
+  bottom: 5%;
+  right: 20%;
   transition: transform 0.2s;
 }
 
 .dice_holder:hover {
   transform: scale(1.1);
+}
+
+.diceSize {
+  width: 10vh;
+  height: 10vh;
 }
 
 .scoreboard_container {

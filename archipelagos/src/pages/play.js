@@ -291,7 +291,7 @@ function Content(props) {
         </h1>
       </div>
       <div>
-        <BoardFrame />
+        <BoardFrame data={props.data} />
       </div>
       <Dice data={props.data} />
 
@@ -313,11 +313,11 @@ function Content(props) {
   );
 }
 
-function BoardFrame() {
+function BoardFrame(props) {
   return (
     <>
       <div className={Classes.canvas_container}>
-        <Component.Layout.Gamezone />
+        <Component.Layout.Gamezone data={props.data} />
       </div>
     </>
   );
@@ -379,7 +379,7 @@ function Dice(props) {
 
   return (
     <div onClick={rolling ? pending : rollDice} className={Classes.dice_holder}>
-      <img src={data[index]} alt={meta[index]} />
+      <img className={Classes.diceSize} src={data[index]} alt={meta[index]} />
     </div>
   );
 }
