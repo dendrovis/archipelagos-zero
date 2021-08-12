@@ -285,9 +285,14 @@ export default function Play(props) {
 function Content(props) {
   return (
     <div>
-      <h1 className={Classes.subtitle + " " + Classes.subtitleContainer}>
-        {STATIC.DATA.PLAY_PAGE_TITLE}
-      </h1>
+      <div>
+        <h1 className={Classes.subtitle + " " + Classes.subtitleContainer}>
+          {STATIC.DATA.PLAY_PAGE_TITLE}
+        </h1>
+      </div>
+      <div>
+        <BoardFrame />
+      </div>
       <Dice data={props.data} />
 
       {
@@ -305,6 +310,16 @@ function Content(props) {
 <div className={Classes.rep}></div>
 </div>*/}
     </div>
+  );
+}
+
+function BoardFrame() {
+  return (
+    <>
+      <div className={Classes.canvas_container}>
+        <Component.Layout.Gamezone />
+      </div>
+    </>
   );
 }
 
@@ -353,6 +368,7 @@ function Dice(props) {
       clearInterval(rollingDice);
       setRollStatus(false);
       props.data.dice1 = index + 1;
+      props.data.turns++;
       if (DEV.DEBUG) console.log(props.data);
     }, timeout);
   }

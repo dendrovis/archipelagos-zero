@@ -373,8 +373,14 @@ export { moveUnit };
 //!===========================================================
 
 export const iniGameData = {
-  unitPos: [-1, -1],
-  cellPos: 0,
+  unit1Pos: [-1, -1],
+  unit2Pos: [-1, -1],
+  unit3Pos: [-1, -1],
+  unit4Pos: [-1, -1],
+  cell1Pos: 0,
+  cell2Pos: 0,
+  cell3Pos: 0,
+  cell4Pos: 0,
   offset: [-1, -1],
   playerCount: -1,
   dice1: -1,
