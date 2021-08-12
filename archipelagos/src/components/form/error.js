@@ -14,7 +14,7 @@ export default function Error(props) {
           className={Classes.errorImg}
         />
       </div>
-      <div className={Classes.containerAlign}>
+      <div className={Classes.containerText}>
         <h2>{props.msg}</h2>
       </div>
     </div>

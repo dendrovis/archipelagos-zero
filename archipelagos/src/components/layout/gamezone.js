@@ -8,6 +8,7 @@ import * as Logic from "../../engine/_export";
 
 /// DEBUG
 import * as DEV from "../../config/debug";
+//import { clearCanvas } from "../../engine/temp";
 
 export default function Gamezone(props) {
   /*const draw = (ctx) => {
@@ -92,24 +93,12 @@ export default function Gamezone(props) {
   return (
     <>
       {
-        //<canvas className={Classes.canvas} width="1000" height="1000" />
-        //<canvas className={Classes.canvas_board} />
-        //<canvas className={Classes.canvas_player} />
-        //<canvas className={Classes.canvas_cell_highlight} />
-        //<canvas className={Classes.canvas_unit} />
-      }
-      {
         //DEV.DEBUG ? <CanvasFrame /> : <> </>
       }
       <CanvasBoard />
       <CanvasPlayer data={props.data} />
-      <CanvasUnit data={props.data} />
-      <CanvasHighlight data={props.data} />
-      {/*<canvas className={Classes.canvas_board} />
-      <canvas className={Classes.canvas_grid} />
-      <canvas className={Classes.canvas_player} />
-      <canvas className={Classes.canvas_cell_highlight} />
-      <canvas className={Classes.canvas_unit} />*/}
+      <CanvasUnit data={props.data} rollState={props.rollState} />
+      <CanvasHighlight data={props.data} rollState={props.rollState} />
     </>
   );
 }
@@ -117,42 +106,55 @@ export default function Gamezone(props) {
 /// Highlight Layer
 function CanvasHighlight(props) {
   const canvasFrameRef = useRef(null);
-  const turns = useRef(props.data.turns);
+  //const turns = useRef(props.data.turns);
 
+  /// Render
   useEffect(() => {
-    if (DEV.DEBUG) console.log("Update Highlight");
-    /// Set canvas Size
-    const width = window.innerHeight;
-    const canvasFrame = canvasFrameRef.current;
-    canvasFrame.width = width;
-    canvasFrame.height = width;
-    const context = canvasFrame.getContext("2d");
+    if (props.rollState > 0) {
+      if (DEV.DEBUG) console.log("Render Highlight");
+      /// find previous cell by substract dice value
+      const prevCellVal = props.data.cell1Pos - props.data.dice1;
 
-    const stepCount = 12;
-    const newStepCount = stepCount;
-    const unitSize = width / 80;
-    //const stepSize = width / stepCount;
+      /// Set canvas Size
+      const width = window.innerHeight;
+      const canvasFrame = canvasFrameRef.current;
+      canvasFrame.width = width;
+      canvasFrame.height = width;
+      const context = canvasFrame.getContext("2d");
 
-    /// New Frame Size
-    const newWidth = (width / stepCount) * newStepCount;
-    const newStepSize = newWidth / newStepCount;
-    const end = newWidth - newStepSize * 2;
-    const start = newStepSize;
-    const offset = newStepSize / 2;
-    const indexX = 1;
-    const indexY = 2;
-    context.fillStyle = "orange";
-    context.beginPath();
-    context.arc(
-      start * indexX + offset,
-      start * indexY + offset,
-      unitSize,
-      0,
-      2 * Math.PI
-    );
-    context.fill();
-    return null;
-  }, [turns]);
+      const stepCount = 12;
+      const newStepCount = stepCount;
+      const unitSize = width / 80;
+      //const stepSize = width / stepCount;
+
+      /// New Frame Size
+      const newWidth = (width / stepCount) * newStepCount;
+      const newStepSize = newWidth / newStepCount;
+      //const end = newWidth - newStepSize * 2;
+      const start = newStepSize;
+      const offset = newStepSize / 2;
+
+      /// get all middle position cell
+      for (let index = prevCellVal + 1; index < props.data.cell1Pos; index++) {
+        /// Convert to pos value & plot
+        const pos = Logic.game.convertSingleCelltoBoardPos(index);
+        const indexX = pos[0] + 1;
+        const indexY = pos[1] + 1;
+        context.fillStyle = "orange";
+        context.beginPath();
+        context.arc(
+          start * indexX + offset,
+          start * indexY + offset,
+          unitSize,
+          0,
+          2 * Math.PI
+        );
+        context.fill();
+      }
+    }
+
+    return () => {};
+  }, [props.rollState]);
 
   return (
     <canvas
@@ -171,6 +173,13 @@ function CanvasUnit(props) {
   //const [turn, setTurn] = useState()
 
   useEffect(() => {
+    ///!===== TODO
+    /// initial and rest
+    if (props.rollState === 0) {
+      if (DEV.DEBUG) console.log("Render Ini Unit");
+    } else {
+      if (DEV.DEBUG) console.log("Render Unit");
+    }
     /// Set canvas Size
     const width = window.innerHeight;
     const canvasFrame = canvasFrameRef.current;
@@ -186,7 +195,7 @@ function CanvasUnit(props) {
     /// New Frame Size
     const newWidth = (width / stepCount) * newStepCount;
     const newStepSize = newWidth / newStepCount;
-    const end = newWidth - newStepSize * 2;
+    //const end = newWidth - newStepSize * 2;
     const start = newStepSize;
     const offset = newStepSize / 2;
     const indexX = props.data.unit1Pos[0];

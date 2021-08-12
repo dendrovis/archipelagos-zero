@@ -380,10 +380,10 @@ export const iniGameData = {
   unit2Pos: [1, 10],
   unit3Pos: [1, 10],
   unit4Pos: [1, 10],
-  cell1Pos: 0,
-  cell2Pos: 0,
-  cell3Pos: 0,
-  cell4Pos: 0,
+  cell1Pos: 1,
+  cell2Pos: 1,
+  cell3Pos: 1,
+  cell4Pos: 1,
   offset: [-1, -1],
   playerCount: -1,
   dice1: -1,
@@ -465,4 +465,12 @@ export function convertCellListtoBoardPos(dataList) {
   if (DEV.DEBUG) console.log(`Converted: ${newArr}`);
 
   return newArr;
+}
+
+export function convertSingleCelltoBoardPos(data) {
+  const arr = [];
+  arr.push((data - 1) % 10);
+  arr.push(10 - Math.ceil(data / 10));
+  if (DEV.DEBUG) console.log(`Converted: ${data} to ${arr}`);
+  return arr;
 }
