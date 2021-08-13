@@ -1,93 +1,14 @@
 import React from "react";
 import Classes from "../../css/layout/gamezone.module.css";
 import { useState, useRef, useEffect } from "react";
-//mport { clearCanvas } from "../../engine/temp";
-//import { getTurn } from "../external/api/sessionStorage";
 /// Logic
 import * as Logic from "../../engine/_export";
 
 /// DEBUG
 import * as DEV from "../../config/debug";
-//import { clearCanvas } from "../../engine/temp";
 
 export default function Gamezone(props) {
-  /*const draw = (ctx) => {
-    ctx.fillStyle = "#000000";
-    ctx.beginPath();
-    ctx.arc(50, 100, 20, 0, 2 * Math.PI);
-    ctx.fill();
-  };*/
-
-  // const [triggerOnce, setOnce] = useState(false);
-  // //const [updateTurn, setTurn] = useState(0);
-
-  // const contextVal = ".gamezone_canvas__3Spmj";
-
-  // function renderCircle() {
-  //   console.log(`Rendered: ${props.coord}`);
-  //   const offset = 20;
-  //   const move_x = props.coord[0]; //200; //100 per move
-  //   const move_y = props.coord[1]; //900;
-  //   console.log(`${props.coord}`);
-  //   var c = document.querySelector(contextVal);
-  //   var ctx = c.getContext("2d");
-  //   ctx.beginPath();
-  //   ctx.arc(10 + offset + move_x, 10 + offset + move_y, 20, 0, 2 * Math.PI);
-  //   ctx.fillStyle = "darkblue";
-  //   ctx.fill();
-  //   ctx.beginPath();
-  //   ctx.arc(55 + offset + move_x, 10 + offset + move_y, 20, 0, 2 * Math.PI);
-  //   ctx.fillStyle = "darkblue";
-  //   ctx.fill();
-  //   ctx.beginPath();
-  //   ctx.arc(10 + offset + move_x, 55 + offset + move_y, 20, 0, 2 * Math.PI);
-  //   ctx.fillStyle = "darkblue";
-  //   ctx.fill();
-  //   ctx.beginPath();
-  //   ctx.arc(55 + offset + move_x, 55 + offset + move_y, 20, 0, 2 * Math.PI);
-  //   ctx.fillStyle = "darkblue";
-  //   ctx.fill();
-  // }
-
-  // function clearCanvas() {
-  //   const context = document.querySelector(contextVal).getContext("2d");
-  //   context.clearRect(
-  //     0,
-  //     0,
-  //     document.querySelector(contextVal).width,
-  //     document.querySelector(contextVal).height
-  //   );
-  // }
-
-  // /// Fire after render
-  // /*useEffect(() => {
-  //   if (!triggerOnce) {
-  //     console.log("Initialize");
-  //     renderCircle([0, 900]);
-  //     setOnce(true);
-  //   }
-
-  //   console.log("executed clean up");
-  //   return () => {
-  //     console.log("useEffect clean up");
-  //   };
-  // });*/
-  // console.log("Executed clean up2");
-
-  // useEffect(() => {
-  //   console.log("Re-render");
-  //   if (undefined !== props.coord) {
-  //     console.log("Update Canvas");
-  //     const coord = props.coord;
-  //     clearCanvas();
-  //     renderCircle(coord);
-  //   }
-
-  //   return () => {
-  //     console.log("useEffect clean up2");
-  //   };
-  // });
-
+  const [isHighlighted, setHighLight] = useState(0);
   if (DEV.DEBUG) console.log("Load Game Zone");
 
   return (
@@ -97,8 +18,18 @@ export default function Gamezone(props) {
       }
       <CanvasBoard />
       <CanvasPlayer data={props.data} />
-      <CanvasUnit data={props.data} rollState={props.rollState} />
-      <CanvasHighlight data={props.data} rollState={props.rollState} />
+      <CanvasUnit
+        data={props.data}
+        rollState={props.rollState}
+        highlightVal={isHighlighted}
+      />
+      <CanvasHighlight
+        data={props.data}
+        rollState={props.rollState}
+        highlightState={setHighLight}
+        isReverted={props.isReverted}
+        setRevert={props.setRevert}
+      />
     </>
   );
 }
@@ -106,8 +37,6 @@ export default function Gamezone(props) {
 /// Highlight Layer
 function CanvasHighlight(props) {
   const canvasFrameRef = useRef(null);
-  //const turns = useRef(props.data.turns);
-
   /// Render
   useEffect(() => {
     if (props.rollState > 0) {
@@ -135,22 +64,77 @@ function CanvasHighlight(props) {
       const offset = newStepSize / 2;
 
       /// get all middle position cell
-      for (let index = prevCellVal + 1; index < props.data.cell1Pos; index++) {
-        /// Convert to pos value & plot
-        const pos = Logic.game.convertSingleCelltoBoardPos(index);
-        const indexX = pos[0] + 1;
-        const indexY = pos[1] + 1;
-        context.fillStyle = "orange";
-        context.beginPath();
-        context.arc(
-          start * indexX + offset,
-          start * indexY + offset,
-          unitSize,
-          0,
-          2 * Math.PI
-        );
-        context.fill();
+      if (!props.isReverted) {
+        if (DEV.DEBUG) console.log("[HIGHLIGHT] Non-Revert Mode");
+        for (
+          let index = prevCellVal + 1;
+          index <= props.data.cell1Pos;
+          index++
+        ) {
+          /// Convert to pos value & plot
+          const pos = Logic.game.convertSingleCelltoBoardPos(index);
+          const indexX = pos[0] + 1;
+          const indexY = pos[1] + 1;
+          context.fillStyle = "orange";
+          context.beginPath();
+          if (index < props.data.cell1Pos) {
+            context.arc(
+              start * indexX + offset,
+              start * indexY + offset,
+              unitSize,
+              0,
+              2 * Math.PI
+            );
+            context.fill();
+          } else {
+            context.lineWidth = 3;
+            context.strokeStyle = "orange";
+            context.arc(
+              start * indexX + offset,
+              start * indexY + offset,
+              unitSize + 20,
+              0,
+              2 * Math.PI
+            );
+            context.stroke();
+          }
+        }
+      } else {
+        if (DEV.DEBUG) console.log("[HIGHLIGHT] Revert Mode");
+        for (let index = props.data.cell1Pos; index <= 100; index++) {
+          /// Convert to pos value & plot
+          const pos = Logic.game.convertSingleCelltoBoardPos(index);
+          const indexX = pos[0] + 1;
+          const indexY = pos[1] + 1;
+          context.fillStyle = "orange";
+          context.beginPath();
+          if (index > props.data.cell1Pos) {
+            context.arc(
+              start * indexX + offset,
+              start * indexY + offset,
+              unitSize,
+              0,
+              2 * Math.PI
+            );
+            context.fill();
+          } else {
+            context.lineWidth = 3;
+            context.strokeStyle = "orange";
+            context.arc(
+              start * indexX + offset,
+              start * indexY + offset,
+              unitSize + 20,
+              0,
+              2 * Math.PI
+            );
+            context.stroke();
+          }
+        }
+
+        props.setRevert(false);
       }
+
+      props.highlightState((val) => (val = val + 1));
     }
 
     return () => {};
@@ -165,43 +149,40 @@ function CanvasHighlight(props) {
     />
   );
 }
+const jumpVal = { val: [] };
 
 /// Unit Layer
 function CanvasUnit(props) {
   const canvasFrameRef = useRef(null);
-  const turns = useRef(props.data.turns);
-  //const [turn, setTurn] = useState()
+  const [isJump, setJump] = useState(false);
 
+  /// Jump Effect
   useEffect(() => {
-    ///!===== TODO
-    /// initial and rest
-    if (props.rollState === 0) {
-      if (DEV.DEBUG) console.log("Render Ini Unit");
-    } else {
-      if (DEV.DEBUG) console.log("Render Unit");
-    }
-    /// Set canvas Size
-    const width = window.innerHeight;
-    const canvasFrame = canvasFrameRef.current;
-    canvasFrame.width = width;
-    canvasFrame.height = width;
-    const context = canvasFrame.getContext("2d");
+    if (isJump) {
+      if (DEV.DEBUG) console.log("Render Jump Unit");
+      if (DEV.DEBUG) console.log(`Get Jump Store: ${jumpVal.val}`);
+      /// Set canvas Size
+      const width = window.innerHeight;
+      const canvasFrame = canvasFrameRef.current;
+      canvasFrame.width = width;
+      canvasFrame.height = width;
+      const context = canvasFrame.getContext("2d");
+      /// Clear canvas
+      context.clearRect(0, 0, width, width);
 
-    const stepCount = 12;
-    const newStepCount = stepCount;
-    const unitSize = width / 60;
-    //const stepSize = width / stepCount;
+      const stepCount = 12;
+      const newStepCount = stepCount;
+      const unitSize = width / 60;
+      //const stepSize = width / stepCount;
 
-    /// New Frame Size
-    const newWidth = (width / stepCount) * newStepCount;
-    const newStepSize = newWidth / newStepCount;
-    //const end = newWidth - newStepSize * 2;
-    const start = newStepSize;
-    const offset = newStepSize / 2;
-    const indexX = props.data.unit1Pos[0];
-    const indexY = props.data.unit1Pos[1];
-
-    if (props.data.playerCount === 1) {
+      /// New Frame Size
+      const newWidth = (width / stepCount) * newStepCount;
+      const newStepSize = newWidth / newStepCount;
+      //const end = newWidth - newStepSize * 2;
+      const start = newStepSize;
+      const offset = newStepSize / 2;
+      const indexX = jumpVal.val[0][0] + 1;
+      const indexY = jumpVal.val[0][1] + 1;
       context.fillStyle = getColor(props.data.player1Rep);
       context.beginPath();
       context.arc(
@@ -223,13 +204,163 @@ function CanvasUnit(props) {
         2 * Math.PI
       );
       context.stroke();
+      /// Bigger line
+      context.strokeStyle = "orange";
+      context.beginPath();
+      context.arc(
+        start * indexX + offset,
+        start * indexY + offset,
+        unitSize + 20,
+        0,
+        2 * Math.PI
+      );
+      context.stroke();
+      if (DEV.DEBUG) console.log("Render Jump Unit Finished");
+
+      jumpVal.val = [];
+      setJump(false);
+    }
+
+    return () => {};
+  }, [isJump]);
+
+  /// Normal Effect
+  useEffect(() => {
+    let x;
+    let y;
+    if (props.highlightVal === 0) {
+      console.log("Run First Unit");
+      x = props.data.unit1Pos[0];
+      y = props.data.unit1Pos[1];
+    } else {
+      console.log("Run Non-First Unit");
+      x = props.data.unit1Pos[0] + 1;
+      y = props.data.unit1Pos[1] + 1;
+    }
+
+    /// Set canvas Size
+    const width = window.innerHeight;
+    const canvasFrame = canvasFrameRef.current;
+    canvasFrame.width = width;
+    canvasFrame.height = width;
+    const context = canvasFrame.getContext("2d");
+
+    const stepCount = 12;
+    const newStepCount = stepCount;
+    const unitSize = width / 60;
+    //const stepSize = width / stepCount;
+
+    /// New Frame Size
+    const newWidth = (width / stepCount) * newStepCount;
+    const newStepSize = newWidth / newStepCount;
+    //const end = newWidth - newStepSize * 2;
+    const start = newStepSize;
+    const offset = newStepSize / 2;
+    const indexX = x;
+    const indexY = y;
+    context.fillStyle = getColor(props.data.player1Rep);
+    context.beginPath();
+    /// initial and rest
+    if (props.data.playerCount === 1) {
+      if (props.highlightVal === 0) {
+        if (DEV.DEBUG) console.log("Render Ini Unit");
+        context.arc(
+          start * indexX + offset,
+          start * indexY + offset,
+          unitSize,
+          0,
+          2 * Math.PI
+        );
+        context.fill();
+        context.strokeStyle = "#420303";
+        context.lineWidth = 3;
+        context.beginPath();
+        context.arc(
+          start * indexX + offset,
+          start * indexY + offset,
+          unitSize,
+          0,
+          2 * Math.PI
+        );
+        context.stroke();
+      } else {
+        if (DEV.DEBUG) console.log("Render Unit");
+        /// find previous cell by substract dice value
+        const prevCellVal = props.data.cell1Pos - props.data.dice1;
+        /// get all middle position cell
+        for (
+          let index = prevCellVal + 1;
+          index <= props.data.cell1Pos;
+          index++
+        ) {
+          setTimeout(() => {
+            /// Clear canvas
+            context.clearRect(0, 0, width, width);
+            /// Convert to pos value & plot
+            const pos = Logic.game.convertSingleCelltoBoardPos(index);
+            const indexX = pos[0] + 1;
+            const indexY = pos[1] + 1;
+            //context.fillStyle = "orange";
+            context.fillStyle = getColor(props.data.player1Rep);
+            context.beginPath();
+            context.lineWidth = 3;
+            if (index < props.data.cell1Pos) {
+              context.arc(
+                start * indexX + offset,
+                start * indexY + offset,
+                unitSize,
+                0,
+                2 * Math.PI
+              );
+            } else {
+              context.arc(
+                start * indexX + offset,
+                start * indexY + offset,
+                unitSize,
+                0,
+                2 * Math.PI
+              );
+            }
+            context.fill();
+            context.stroke();
+
+            if (DEV.DEBUG) console.log(`Cur Pos: ${props.data.cell1Pos}`);
+            if (DEV.DEBUG) console.log(`I Pos: ${index}`);
+
+            /// IF last step check Jump
+            if (props.data.cell1Pos === index) {
+              setTimeout(() => {
+                const jumpCellsList = Logic.game.fixedJumpCells();
+                jumpCellsList.forEach((jumpTarget) => {
+                  /// get jump source
+                  if (props.data.cell1Pos === jumpTarget[0]) {
+                    const newPosVal = Logic.game.convertSingleCelltoBoardPos(
+                      jumpTarget[1]
+                    );
+                    if (DEV.DEBUG)
+                      console.log(
+                        `Jumping to Cell ${jumpTarget[1]} at ${newPosVal}`
+                      );
+                    props.data.cell1Pos = jumpTarget[1];
+                    jumpVal.val.push(newPosVal);
+                    if (DEV.DEBUG)
+                      console.log(`Current Jump Store: ${jumpVal.val}`);
+                    setJump(true);
+                  }
+                });
+              }, 300);
+            }
+          }, 200);
+        }
+      }
+
       if (DEV.DEBUG) console.log("[Unit] New Position");
     } else {
       if (DEV.DEBUG) console.log("IN-DEV");
     }
 
     return () => {};
-  }, [turns]);
+  }, [props.highlightVal]);
 
   return (
     <canvas

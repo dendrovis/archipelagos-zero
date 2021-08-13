@@ -380,7 +380,7 @@ export const iniGameData = {
   unit2Pos: [1, 10],
   unit3Pos: [1, 10],
   unit4Pos: [1, 10],
-  cell1Pos: 1,
+  cell1Pos: 1, //1,
   cell2Pos: 1,
   cell3Pos: 1,
   cell4Pos: 1,
