@@ -46,3 +46,9 @@
   font-size: 20px;
   color: #ff4747;
 }
+
+.version {
+  position: absolute;
+  bottom: 0%;
+  right: 0%;
+}

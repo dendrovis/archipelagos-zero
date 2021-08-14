@@ -1,13 +1,13 @@
-import Player from "./player";
+//import Player from "./player";
 import {
-  setPlayer,
-  getPlayer,
-  setMode,
+  //setPlayer,
+  // getPlayer,
+  //setMode,
   getMode,
-  iniGame,
+  //iniGame,
   getTurn,
   updateTurn,
-  getPlayerUnitPos,
+  //getPlayerUnitPos,
   getPlayerCellPos,
   updateUnitPos,
   updateCellPos,
@@ -59,7 +59,7 @@ async function moveUnit(moveCount, isPlayer) {
     }
 
     /// get current unit position
-    const curUnitPos = getPlayerUnitPos(1);
+    //const curUnitPos = getPlayerUnitPos(1);
 
     /// find the new position
     const newUnitPos = getAllCellFixedCoord(curCellPos + moveCount);

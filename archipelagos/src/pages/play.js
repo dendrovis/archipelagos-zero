@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /// REACT Package
 import React, { useState, useEffect } from "react";
 import { useHistory, useLocation } from "react-router-dom";
@@ -142,6 +143,7 @@ function OverlaySection() {
         tooltip={STATIC.DATA.GLOBAL_SETTINGS_TOOLTIP}
         size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
       />
+      <div className={GlobalClasses.version}>{DEV.VERSION}</div>
     </>
   );
 }

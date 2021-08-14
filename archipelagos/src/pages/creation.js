@@ -7,7 +7,7 @@ import Classes from "../css/pages/creation.module.css";
 import GlobalClasses from "../css/global.module.css";
 
 /// Storage Control
-import * as Storage from "../external/api/sessionStorage";
+//import * as Storage from "../external/api/sessionStorage";
 
 /// Component Package
 import * as Component from "../components/component";
@@ -65,6 +65,7 @@ function OverlaySection() {
         tooltip={STATIC.DATA.GLOBAL_SETTINGS_TOOLTIP}
         size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
       />
+      <div className={GlobalClasses.version}>{DEV.VERSION}</div>
     </>
   );
 }

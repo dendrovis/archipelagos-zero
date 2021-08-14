@@ -88,6 +88,7 @@ function OverlaySection() {
         tooltip={STATIC.DATA.GLOBAL_SETTINGS_TOOLTIP}
         size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
       />
+      <div className={GlobalClasses.version}>{DEV.VERSION}</div>
     </>
   );
 }

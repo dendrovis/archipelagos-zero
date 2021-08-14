@@ -1,4 +1,4 @@
-import PropTypes from "prop-types";
+//import PropTypes from "prop-types";
 import Player from "./player";
 import {
   setPlayer,
@@ -100,7 +100,7 @@ function normalisePlayerName(data) {
   return data[0].toUpperCase() + data.slice(1).toLowerCase();
 }
 
-function checkValidPlayerName(data) {
+/*function checkValidPlayerName(data) {
   if (DEBUG) console.log("Check Valid Player Name");
   /// check for empty data
   if (data.length === 0) return false;
@@ -109,9 +109,9 @@ function checkValidPlayerName(data) {
   if (/\d|^\w{17}|\s|[^\w]/.test(data) === true) return false;
   if (DEBUG) console.log("Valid Player Name");
   return true;
-}
+}*/
 
-function checkNull(player, mode) {
+/*function checkNull(player, mode) {
   if (DEBUG) console.log("Check Null");
   if (player.name === "") return false;
   if (DEBUG) console.log("Name Pass");
@@ -120,7 +120,7 @@ function checkNull(player, mode) {
   if (mode === -1) return false;
   if (DEBUG) console.log("Mode Pass");
   return true;
-}
+}*/
 
 function initialize(isRender) {
   if (DEBUG) console.log("Initialize");
@@ -205,7 +205,7 @@ async function moveUnit(moveCount, isPlayer) {
     }
 
     /// get current unit position
-    const curUnitPos = getPlayerUnitPos(1);
+    //const curUnitPos = getPlayerUnitPos(1);
 
     /// find the new position
     const newUnitPos = getAllCellFixedCoord(curCellPos + moveCount);
@@ -242,9 +242,9 @@ function getTopLeftCellCoord(cellNum) {
 }
 
 /// check if coord [x,y] within cell range return a BOOLEAN
-function isWithinCellRange(coord) {
+/*function isWithinCellRange(coord) {
   const unitRadius = 15;
-}
+}*/
 
 /// find the all prefix pos of the cell [topleft,topright,btm-right,btm-left]
 function getAllCellFixedCoord(cellNum) {
