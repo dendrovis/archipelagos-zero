@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import Classes from "../../css/layout/gamezone.module.css";
 import { useState, useRef, useEffect } from "react";
@@ -720,7 +721,7 @@ function CanvasBoard() {
     />
   );
 }
-
+/*
 function CanvasFrame() {
   const canvasFrameRef = useRef(null);
 
@@ -762,3 +763,4 @@ function CanvasFrame() {
     />
   );
 }
+*/
