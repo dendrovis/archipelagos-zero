@@ -432,7 +432,7 @@ function randomDiceValue() {
 
 export { randomDiceValue };
 
-export function fixedJumpCells() {
+function fixedJumpCells() {
   /// start to end
   return [
     [3, 51],
@@ -451,7 +451,7 @@ export function fixedJumpCells() {
   ];
 }
 
-export function convertCellListtoBoardPos(dataList) {
+function convertCellListtoBoardPos(dataList) {
   const newArr = [];
   dataList.forEach((coord) => {
     const tempArrS = [];
@@ -474,3 +474,9 @@ export function convertSingleCelltoBoardPos(data) {
   if (DEV.DEBUG) console.log(`Converted: ${data} to ${arr}`);
   return arr;
 }
+
+export function getJumpList() {
+  return convertCellListtoBoardPos(fixedJumpCells());
+}
+
+export { fixedJumpCells, convertCellListtoBoardPos };

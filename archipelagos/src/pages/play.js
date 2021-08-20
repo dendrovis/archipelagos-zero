@@ -27,6 +27,9 @@ export default function Play(props) {
   const [isEndGame, setEndGame] = useState(false); //control game end state
   const [isDiceRolled, setRoll] = useState(0);
   const [isReverted, setRevert] = useState(false);
+  const prevData = useLocation().state;
+  console.log(`Creation Object: ${JSON.stringify(prevData)}`);
+  console.log(prevData);
   const { state } = useLocation();
   const history = useHistory();
   console.log(state);
@@ -121,11 +124,16 @@ function BoardFrame(props) {
   return (
     <>
       <div className={Classes.canvas_container}>
-        <Component.Layout.Gamezone
+        <Component.Layout.GameZone
           data={props.data}
-          rollState={props.rollState}
+          state={{
+            rollState: props.rollState,
+            isReverted: props.isReverted,
+            setRevert: props.setRevert,
+          }}
+          /*rollState={props.rollState}
           isReverted={props.isReverted}
-          setRevert={props.setRevert}
+          setRevert={props.setRevert}*/
         />
       </div>
     </>
