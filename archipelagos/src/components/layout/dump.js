@@ -297,3 +297,208 @@ function CanvasFrame() {
   );
 }
 */
+
+/// Player Layer
+function CanvasPlayer(props) {
+  const canvasFrameRef = useRef(null);
+
+  useEffect(() => {
+    const unitSize = 25;
+
+    /// Set canvas Size
+    const width = window.innerHeight;
+    const canvasFrame = canvasFrameRef.current;
+    canvasFrame.width = width;
+    canvasFrame.height = width;
+    const context = canvasFrame.getContext("2d");
+    const stepCount = 12;
+    const stepSize = width / stepCount;
+    const offset = stepSize / 2;
+
+    /// Dice Holders
+    context.fillStyle = "#420303";
+    /// Player 1 Holder
+    context.beginPath();
+    context.arc(
+      9 * stepSize + offset, // X
+      11 * stepSize + offset, // Y
+      unitSize,
+      0,
+      2 * Math.PI
+    );
+    context.fill();
+
+    /// Player 2 Holder
+    context.beginPath();
+    context.arc(
+      0 * stepSize + offset, // X
+      9 * stepSize + offset, // Y
+      unitSize,
+      0,
+      2 * Math.PI
+    );
+    context.fill();
+
+    /// Player 3 Holder
+    context.beginPath();
+    context.arc(
+      2 * stepSize + offset, // X
+      0 * stepSize + offset, // Y
+      unitSize,
+      0,
+      2 * Math.PI
+    );
+    context.fill();
+
+    /// Player 4 Holder
+    context.beginPath();
+    context.arc(
+      11 * stepSize + offset, // X
+      2 * stepSize + offset, // Y
+      unitSize,
+      0,
+      2 * Math.PI
+    );
+    context.fill();
+
+    /// Config
+    let choice = -1;
+    let playerChoice = "";
+
+    for (let index = 0; index < 4; index++) {
+      if (index === 0) {
+        choice = props.data.player1Rep;
+      }
+      if (index === 1) {
+        choice = props.data.player2Rep;
+      }
+      if (index === 2) {
+        choice = props.data.player3Rep;
+      }
+      if (index === 3) {
+        choice = props.data.player4Rep;
+      }
+
+      switch (choice) {
+        case 0:
+          playerChoice = "lightpink";
+          break;
+        case 1:
+          playerChoice = "lightgreen";
+          break;
+        case 2:
+          playerChoice = "lightblue";
+          break;
+        case 3:
+          playerChoice = "lightsalmon";
+          break;
+
+        default:
+          if (DEV.DEBUG) console.log("[ERROR] Assigning Player Color");
+          playerChoice = "grey";
+          break;
+      }
+
+      context.fillStyle = playerChoice;
+
+      if (index === 0) {
+        /// Player 1 Rep
+        context.beginPath();
+        context.arc(
+          2 * stepSize + offset, // X
+          11 * stepSize + offset, // Y
+          unitSize,
+          0,
+          2 * Math.PI
+        );
+        context.fill();
+      }
+      if (index === 1) {
+        /// Player 2 Rep
+        context.beginPath();
+        context.arc(
+          0 * stepSize + offset, // X
+          2 * stepSize + offset, // Y
+          unitSize,
+          0,
+          2 * Math.PI
+        );
+        context.fill();
+      }
+      if (index === 2) {
+        /// Player 3 Rep
+        context.beginPath();
+        context.arc(
+          9 * stepSize + offset, // X
+          0 * stepSize + offset, // Y
+          unitSize,
+          0,
+          2 * Math.PI
+        );
+        context.fill();
+      }
+      if (index === 3) {
+        /// Player 4 Rep
+        context.beginPath();
+        context.arc(
+          11 * stepSize + offset, // X
+          9 * stepSize + offset, // Y
+          unitSize,
+          0,
+          2 * Math.PI
+        );
+        context.fill();
+      }
+    }
+
+    context.fillStyle = "#000000";
+
+    /// Player 1 Name
+    const textOffset = offset + 14;
+    context.font = "40px Arial";
+    context.textAlign = "center";
+    context.fillText(
+      props.data.player1Name,
+      6 * stepSize,
+      11 * stepSize + textOffset
+    );
+
+    /// Player 3 Name
+    context.font = "40px Arial";
+    context.textAlign = "center";
+    context.fillText(
+      props.data.player3Name,
+      6 * stepSize,
+      0 * stepSize + textOffset
+    );
+
+    /// Player 2 Name
+    context.save();
+    context.translate(100, 300);
+    context.rotate(-0.5 * Math.PI);
+    context.fillText(
+      props.data.player2Name,
+      -2 * stepSize,
+      0 * stepSize - textOffset
+    );
+
+    /// Player 4 Name
+    context.rotate(1 * Math.PI);
+    context.fillText(
+      props.data.player4Name,
+      2 * stepSize,
+      -11 * stepSize + textOffset + 25
+    );
+
+    return null;
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasFrameRef}
+      className={Classes.canvas_player}
+      width="37.5vw"
+      height="37.5vw"
+    />
+  );
+}

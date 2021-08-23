@@ -1,5 +1,5 @@
 import Card from "./card";
-import GameZone from "./gamezone";
+import GameZone from "./GameZone";
 import List from "./list";
 import Table from "./table";
 

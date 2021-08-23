@@ -55,7 +55,7 @@ export default function Play(props) {
         setLoad(-1);
         setTimeout(() => {
           history.push({ pathname: "/" });
-        }, 1000);
+        }, 250);
       } else {
         curGameData.player1Name = state.playerName;
         curGameData.playerCount = state.playerMode + 1;
@@ -63,7 +63,7 @@ export default function Play(props) {
         setLoad(1);
         console.log(curGameData);
       }
-    }, 2000);
+    }, 500);
     return null; //clean up
   }, []);
 
@@ -164,7 +164,7 @@ function Dice(props) {
 
   function rollDice() {
     const time = 100;
-    const timeout = 1500;
+    const timeout = 500;
 
     if (DEV.DEBUG) console.log("[Click] Dice");
 

@@ -1,3 +1,6 @@
+/// Logic
+import * as Logic from "../../engine/_export";
+
 /// DEBUG
 import * as DEV from "../../config/debug";
 
@@ -95,3 +98,172 @@ export function drawCanvasCellNum({
     }
   }
 }
+
+export function drawUnit({
+  context,
+  start,
+  stepSize,
+  cellValue,
+  playerRep,
+  offset,
+}) {
+  const [indexX, indexY] = Logic.game.convertSingleCelltoBoardPos(cellValue);
+  const unitSize = stepSize / 6;
+  context.fillStyle = getColor(playerRep);
+  context.beginPath();
+  context.arc(
+    start * (indexX + 1) + offset,
+    start * (indexY + 1) + offset,
+    unitSize,
+    0,
+    2 * Math.PI
+  );
+  context.fill();
+  context.strokeStyle = "#420303";
+  context.lineWidth = 3;
+  context.beginPath();
+  context.arc(
+    start * (indexX + 1) + offset,
+    start * (indexY + 1) + offset,
+    unitSize,
+    0,
+    2 * Math.PI
+  );
+  context.stroke();
+}
+
+function getColor(choice) {
+  switch (choice) {
+    case 0:
+      return "lightpink";
+
+    case 1:
+      return "lightgreen";
+
+    case 2:
+      return "lightblue";
+
+    case 3:
+      return "lightsalmon";
+
+    default:
+      if (DEV.DEBUG) console.log("[ERROR-Unit] Assigning Player Color");
+      return "grey";
+  }
+}
+
+export { getColor };
+
+export function drawPlayerDiceHolder({ context, stepSize }) {
+  const offset = stepSize / 2;
+  const unitSize = stepSize / 4;
+  const playerDicePosList = [
+    [9, 11],
+    [0, 9],
+    [2, 0],
+    [11, 2],
+  ];
+  context.fillStyle = "#420303";
+  playerDicePosList.forEach((XYIndex) => {
+    context.beginPath();
+    context.arc(
+      XYIndex[0] * stepSize + offset, // X
+      XYIndex[1] * stepSize + offset, // Y
+      unitSize,
+      0,
+      2 * Math.PI
+    );
+    context.fill();
+  });
+}
+
+export function drawPlayerName({ context, stepSize, playerNameList }) {
+  const offset = stepSize / 2;
+  context.font = "40px Arial";
+  context.textAlign = "center";
+  context.fillStyle = "black";
+  const playerNamePosList = [
+    [6, 11],
+    [-2, 0],
+    [6, 1],
+    [2, -10],
+  ];
+  let fineAdjustment = 0;
+  playerNamePosList.forEach((XYIndex, index) => {
+    if (index === 0) {
+      fineAdjustment = 15;
+    } else if (index === 1) {
+      context.translate(100, 300);
+      context.rotate(-0.5 * Math.PI);
+      fineAdjustment = -90;
+    } else if (index === 2) {
+      fineAdjustment += 25;
+    } else if (index === 3) {
+      context.translate(100, 300);
+      context.rotate(+0.5 * Math.PI);
+      fineAdjustment += 25;
+    }
+    context.fillText(
+      playerNameList[index],
+      XYIndex[0] * stepSize,
+      XYIndex[1] * stepSize + offset + fineAdjustment
+    );
+    if (index === 1) {
+      context.rotate(+0.5 * Math.PI);
+      context.translate(-100, -300);
+    } else if (index === 3) {
+      context.rotate(-0.5 * Math.PI);
+      context.translate(-100, -300);
+    }
+  });
+}
+
+export function drawPlayerRep({ context, stepSize, playerRepList }) {
+  const offset = stepSize / 2;
+  const unitSize = stepSize / 4;
+
+  const playerRepPosList = [
+    [2, 11],
+    [0, 2],
+    [9, 0],
+    [11, 9],
+  ];
+
+  playerRepPosList.forEach((XYIndex, index) => {
+    context.fillStyle = getColor(playerRepList[index]);
+    context.beginPath();
+    context.arc(
+      XYIndex[0] * stepSize + offset, // X
+      XYIndex[1] * stepSize + offset, // Y
+      unitSize,
+      0,
+      2 * Math.PI
+    );
+    context.fill();
+  });
+}
+
+/// Build Canvas
+export const buildCanvas = (ref) => {
+  const canvasCtxRef = getCanvasContext({ ref: ref });
+  const frameWidth = window.innerHeight;
+  setCanvasDimension({
+    ref: ref,
+    width: frameWidth,
+    height: frameWidth,
+  });
+  return [canvasCtxRef, frameWidth];
+};
+
+/// Build Grid
+export const buildGrid = (frameWidth) => {
+  const stepCount = 12;
+  const stepSize = frameWidth / stepCount;
+  const end = stepSize * 10;
+  const start = stepSize;
+  return [start, end, stepSize, stepCount];
+};
+
+export const clear = ({ context }) => {
+  context.clearRect(0, 0, window.innerHeight, window.innerHeight);
+};
