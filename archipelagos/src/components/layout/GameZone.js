@@ -60,7 +60,7 @@ export default function GameZone({ data, state }) {
     <>
       <CanvasBoard />
       <CanvasPlayer data={data} />
-      <CanvasHighlight />
+      <CanvasHighlight data={data} state={state} />
       <CanvasUnit data={data} state={state} />
 
       {/*<button className={Classes.canvas_board} onClick={fire}>
@@ -104,245 +104,95 @@ export default function GameZone({ data, state }) {
   );
 }
 
-const jumpVal = { val: [] };
-
-/// Unit Layer
-function CanvasUnit2(props) {
-  const canvasFrameRef = useRef(null);
-  const [isJump, setJump] = useState(false);
-
-  /// Jump Effect
-  useEffect(() => {
-    if (isJump) {
-      if (DEV.DEBUG) console.log("Render Jump Unit");
-      if (DEV.DEBUG) console.log(`Get Jump Store: ${jumpVal.val}`);
-      /// Set canvas Size
-      const width = window.innerHeight;
-      const canvasFrame = canvasFrameRef.current;
-      canvasFrame.width = width;
-      canvasFrame.height = width;
-      const context = canvasFrame.getContext("2d");
-      /// Clear canvas
-      context.clearRect(0, 0, width, width);
-
-      const stepCount = 12;
-      const newStepCount = stepCount;
-      const unitSize = width / 60;
-      //const stepSize = width / stepCount;
-
-      /// New Frame Size
-      const newWidth = (width / stepCount) * newStepCount;
-      const newStepSize = newWidth / newStepCount;
-      //const end = newWidth - newStepSize * 2;
-      const start = newStepSize;
-      const offset = newStepSize / 2;
-      const indexX = jumpVal.val[0][0] + 1;
-      const indexY = jumpVal.val[0][1] + 1;
-      context.fillStyle = getColor(props.data.player1Rep);
-      context.beginPath();
-      context.arc(
-        start * indexX + offset,
-        start * indexY + offset,
-        unitSize,
-        0,
-        2 * Math.PI
-      );
-      context.fill();
-      context.strokeStyle = "#420303";
-      context.lineWidth = 3;
-      context.beginPath();
-      context.arc(
-        start * indexX + offset,
-        start * indexY + offset,
-        unitSize,
-        0,
-        2 * Math.PI
-      );
-      context.stroke();
-      /// Bigger line
-      context.strokeStyle = "orange";
-      context.beginPath();
-      context.arc(
-        start * indexX + offset,
-        start * indexY + offset,
-        unitSize + 20,
-        0,
-        2 * Math.PI
-      );
-      context.stroke();
-      if (DEV.DEBUG) console.log("Render Jump Unit Finished");
-
-      jumpVal.val = [];
-      setJump(false);
-    }
-
-    return () => {};
-  }, [isJump]);
-
-  /// Normal Effect
-  useEffect(() => {
-    let x;
-    let y;
-    if (props.highlightVal === 0) {
-      console.log("Run First Unit");
-      x = props.data.unit1Pos[0];
-      y = props.data.unit1Pos[1];
+class Shape {
+  constructor(ctx, type, id) {
+    this.ctx = ctx;
+    this.type = type;
+    this.id = id;
+    this.draw();
+  }
+  draw() {
+    if (this.type === "circle") {
+      this.drawCircle();
     } else {
-      console.log("Run Non-First Unit");
-      x = props.data.unit1Pos[0] + 1;
-      y = props.data.unit1Pos[1] + 1;
+      this.drawRect();
     }
+  }
 
-    /// Set canvas Size
-    const width = window.innerHeight;
-    const canvasFrame = canvasFrameRef.current;
-    canvasFrame.width = width;
-    canvasFrame.height = width;
-    const context = canvasFrame.getContext("2d");
+  drawCircle() {
+    this.ctx.save();
+    this.ctx.beginPath();
+    this.ctx.arc(95, 50, 40, 0, 2 * Math.PI);
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
 
-    const stepCount = 12;
-    const newStepCount = stepCount;
-    const unitSize = width / 60;
-    //const stepSize = width / stepCount;
+  drawRect() {
+    this.ctx.save();
+    this.ctx.fillStyle = "red";
+    this.ctx.fillRect(10, 10, 150, 80);
+    this.ctx.restore();
+  }
 
-    /// New Frame Size
-    const newWidth = (width / stepCount) * newStepCount;
-    const newStepSize = newWidth / newStepCount;
-    //const end = newWidth - newStepSize * 2;
-    const start = newStepSize;
-    const offset = newStepSize / 2;
-    const indexX = x;
-    const indexY = y;
-    context.fillStyle = getColor(props.data.player1Rep);
-    context.beginPath();
-    /// initial and rest
-    if (props.data.playerCount === 1) {
-      if (props.highlightVal === 0) {
-        if (DEV.DEBUG) console.log("Render Ini Unit");
-        context.arc(
-          start * indexX + offset,
-          start * indexY + offset,
-          unitSize,
-          0,
-          2 * Math.PI
-        );
-        context.fill();
-        context.strokeStyle = "#420303";
-        context.lineWidth = 3;
-        context.beginPath();
-        context.arc(
-          start * indexX + offset,
-          start * indexY + offset,
-          unitSize,
-          0,
-          2 * Math.PI
-        );
-        context.stroke();
-      } else {
-        if (DEV.DEBUG) console.log("Render Unit");
-        /// find previous cell by substract dice value
-        const prevCellVal = props.data.cell1Pos - props.data.dice1;
-        /// get all middle position cell
-        for (
-          let index = prevCellVal + 1;
-          index <= props.data.cell1Pos;
-          index++
-        ) {
-          setTimeout(() => {
-            /// Clear canvas
-            context.clearRect(0, 0, width, width);
-            /// Convert to pos value & plot
-            const pos = Logic.game.convertSingleCelltoBoardPos(index);
-            const indexX = pos[0] + 1;
-            const indexY = pos[1] + 1;
-            //context.fillStyle = "orange";
-            context.fillStyle = getColor(props.data.player1Rep);
-            context.beginPath();
-            context.lineWidth = 3;
-            if (index < props.data.cell1Pos) {
-              context.arc(
-                start * indexX + offset,
-                start * indexY + offset,
-                unitSize,
-                0,
-                2 * Math.PI
-              );
-            } else {
-              context.arc(
-                start * indexX + offset,
-                start * indexY + offset,
-                unitSize,
-                0,
-                2 * Math.PI
-              );
-            }
-            context.fill();
-            context.stroke();
+  changeRect() {
+    this.ctx.save();
+    this.ctx.fillStyle = "red";
+    this.ctx.fillRect(10, 10, 10, 20);
+    this.ctx.restore();
+  }
 
-            if (DEV.DEBUG) console.log(`Cur Pos: ${props.data.cell1Pos}`);
-            if (DEV.DEBUG) console.log(`I Pos: ${index}`);
-
-            /// IF last step check Jump
-            if (props.data.cell1Pos === index) {
-              setTimeout(() => {
-                const jumpCellsList = Logic.game.fixedJumpCells();
-                jumpCellsList.forEach((jumpTarget) => {
-                  /// get jump source
-                  if (props.data.cell1Pos === jumpTarget[0]) {
-                    const newPosVal = Logic.game.convertSingleCelltoBoardPos(
-                      jumpTarget[1]
-                    );
-                    if (DEV.DEBUG)
-                      console.log(
-                        `Jumping to Cell ${jumpTarget[1]} at ${newPosVal}`
-                      );
-                    props.data.cell1Pos = jumpTarget[1];
-                    jumpVal.val.push(newPosVal);
-                    if (DEV.DEBUG)
-                      console.log(`Current Jump Store: ${jumpVal.val}`);
-                    setJump(true);
-                  }
-                });
-              }, 300);
-            }
-          }, 200);
-        }
-      }
-
-      if (DEV.DEBUG) console.log("[Unit] New Position");
-    } else {
-      if (DEV.DEBUG) console.log("IN-DEV");
-    }
-
-    return () => {};
-  }, [props.highlightVal]);
-
-  return (
-    <canvas
-      ref={canvasFrameRef}
-      className={Classes.canvas_unit}
-      width="37.5vw"
-      height="37.5vw"
-    />
-  );
+  print() {
+    console.log(this);
+  }
 }
 
-function getColor(choice) {
-  switch (choice) {
-    case 0:
-      return "lightpink";
+/// Proof canvas
+function TextCanvas() {
+  /// References
+  const canvasFrameRef = useRef(null);
+  const [ctx, setContext] = useState(null);
+  let testobj = null;
 
-    case 1:
-      return "lightgreen";
+  useEffect(() => {
+    setContext(canvasFrameRef.current.getContext("2d"));
+    return () => {};
+  }, []);
 
-    case 2:
-      return "lightblue";
+  /// Draw a circle
+  const circle = () => {
+    const c = new Shape(ctx, "circle", "circle-1");
+    c.print();
+  };
 
-    case 3:
-      return "lightsalmon";
+  /// Filled a rect
+  const rect = () => {
+    const r = new Shape(ctx, "rect", "rect-1");
+    r.print();
+    testobj = new Shape(ctx, "rect", "rect-1");
+  };
 
-    default:
-      if (DEV.DEBUG) console.log("[ERROR-Unit] Assigning Player Color");
-      return "grey";
-  }
+  /// Remove the rect
+  const clear = () => {
+    ctx.clearRect(0, 0, window.innerHeight, window.innerHeight);
+  };
+
+  const changeShape = () => {
+    testobj = new Shape(ctx, "rect", "rect-1");
+  };
+
+  return (
+    <>
+      <canvas
+        ref={canvasFrameRef}
+        className={Classes.canvas_board}
+        width="1000px"
+        height="1000px"
+      />
+
+      <button onClick={circle}>Circle</button>
+      <button onClick={rect}>Rect</button>
+      <button onClick={clear}>Clear</button>
+      <button onClick={changeShape}>Change</button>
+    </>
+  );
 }

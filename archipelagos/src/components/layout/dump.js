@@ -502,3 +502,52 @@ function CanvasPlayer(props) {
     />
   );
 }
+
+/**
+ * Ref for decouple use context;
+ * 
+ * import React from 'react'
+
+const GZContext = React.createContext()
+
+const GZ = ({ children }) => {
+    const saySamIsAwesome = () => {
+        alert('Sam is aweSAM!')
+    }
+    return (
+        <GZContext.Provider value={{ actions: {
+            saySamIsAwesome
+        }}}>
+            { children }
+        </GZContext.Provider>
+    )
+}
+
+const useGZ = () => {
+    const gzCtxValue = React.useContext(GZContext)
+    return gzCtxValue
+}
+
+// GZBoard
+
+const GZBoard = () => {
+    const ref = React.useRef()
+    const gz = useGZ()
+    React.useEffect(() => {
+        gz.actions.saySamIsAwesome()
+        gz.actions.setGZBoardRef(ref.current)
+    }, [])
+    return <canvas ref={ref} />
+}
+
+// APP.js
+const App = () => {
+    return (
+        <GZ>
+            <GZBoard />
+        </GZ>
+    )
+}
+ * 
+ * 
+ */

@@ -267,3 +267,29 @@ export const buildGrid = (frameWidth) => {
 export const clear = ({ context }) => {
   context.clearRect(0, 0, window.innerHeight, window.innerHeight);
 };
+
+export function drawHighlight({
+  context,
+  start,
+  stepSize,
+  cellValue,
+  finalValue,
+}) {
+  /// Convert to pos value & plot
+  const [indexX, indexY] = Logic.game.convertSingleCelltoBoardPos(cellValue);
+  let unitSize = -1;
+  !finalValue ? (unitSize = stepSize / 7) : (unitSize = stepSize / 3.5);
+  const offset = stepSize / 2;
+  context.fillStyle = "orange";
+  context.strokeStyle = "orange";
+  context.lineWidth = 3;
+  context.beginPath();
+  context.arc(
+    start * (indexX + 1) + offset,
+    start * (indexY + 1) + offset,
+    unitSize,
+    0,
+    2 * Math.PI
+  );
+  !finalValue ? context.fill() : context.stroke();
+}
