@@ -9,7 +9,7 @@ import * as Canvas from "./canvasManager";
 import * as Logic from "../../engine/_export";
 
 /// Hooks
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 
 /// DEBUG
 import * as DEV from "../../config/debug";
@@ -102,8 +102,6 @@ export default function CanvasHighlight({ data, state }) {
         }
       }
     }, 150);
-
-    /// Set State Roll Dice Animation Finish
   };
 
   /// Draw Highlight and Animation

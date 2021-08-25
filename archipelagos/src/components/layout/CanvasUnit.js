@@ -9,7 +9,7 @@ import * as Canvas from "./canvasManager";
 import * as Logic from "../../engine/_export";
 
 /// Hooks
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 
 /// DEBUG
 import * as DEV from "../../config/debug";
@@ -22,6 +22,7 @@ export default function CanvasUnit({ data, state }) {
 
   /// State Track
   const rollUpdate = state.rollState;
+  //const setRollStatus = state.setRollStatus;
 
   /// Callback Fn
   let timeOut;
@@ -131,6 +132,10 @@ export default function CanvasUnit({ data, state }) {
 
       /// Execute Animation
       delayLoop({ index, context, start, stepSize, prevCellValue, offset });
+      //!----- set false without rerun that part
+      //console.log("helo");
+      //setRollStatus(false);
+      //console.log("helo2");
     }
   };
 

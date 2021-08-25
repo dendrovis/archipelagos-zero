@@ -27,6 +27,7 @@ export default function Play(props) {
   const [isEndGame, setEndGame] = useState(false); //control game end state
   const [isDiceRolled, setRoll] = useState(0);
   const [isReverted, setRevert] = useState(false);
+  //const [rolling, setRollStatus] = useState(false);
   const prevData = useLocation().state;
   if (DEV.DEBUG) console.log(`Creation Object: ${JSON.stringify(prevData)}`);
   if (DEV.DEBUG) console.log(prevData);
@@ -77,6 +78,8 @@ export default function Play(props) {
           endState={isEndGame}
           setEndState={setEndGame}
           setDiceRoll={setRoll}
+          //setRollStatus={setRollStatus}
+          //rolling={rolling}
           diceToggle={isDiceRolled}
           rollState={isDiceRolled}
           isReverted={isReverted}
@@ -101,14 +104,18 @@ function Content(props) {
           rollState={props.rollState}
           isReverted={props.isReverted}
           setRevert={props.setRevert}
+          setDiceRoll={props.setRoll}
+          //setRollStatus={props.setRollStatus}
         />
       </div>
       <Dice
         data={props.data}
         endState={props.setEndState}
         setDiceRoll={props.setDiceRoll}
+        //setRollStatus={props.setRollStatus}
         diceToggle={props.diceToggle}
         setRevert={props.setRevert}
+        //rolling={props.rolling}
       />
       <>
         <OverlaySection />
@@ -129,6 +136,7 @@ function BoardFrame(props) {
             rollState: props.rollState,
             isReverted: props.isReverted,
             setRevert: props.setRevert,
+            setRollStatus: props.setRollStatus,
           }}
         />
       </div>
@@ -165,6 +173,7 @@ function Dice(props) {
     if (DEV.DEBUG) console.log("[Click] Dice");
 
     setRollStatus(true);
+    //props.setRollStatus(true);
     const rollingDice = setInterval(function (time) {
       if (DEV.DEBUG) console.log("Rolling...");
       const val = Logic.game.randomDiceValue();
@@ -198,7 +207,7 @@ function Dice(props) {
   }
 
   function pending() {
-    if (DEV.DEBUG) console.log("Pending");
+    console.log("Pending");
   }
 
   return (
