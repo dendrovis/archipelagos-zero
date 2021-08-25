@@ -28,11 +28,11 @@ export default function Play(props) {
   const [isDiceRolled, setRoll] = useState(0);
   const [isReverted, setRevert] = useState(false);
   const prevData = useLocation().state;
-  console.log(`Creation Object: ${JSON.stringify(prevData)}`);
-  console.log(prevData);
+  if (DEV.DEBUG) console.log(`Creation Object: ${JSON.stringify(prevData)}`);
+  if (DEV.DEBUG) console.log(prevData);
   const { state } = useLocation();
   const history = useHistory();
-  console.log(state);
+  if (DEV.DEBUG) console.log(state);
 
   useEffect(() => {
     if (isDiceRolled > 0) {
@@ -61,7 +61,6 @@ export default function Play(props) {
         curGameData.playerCount = state.playerMode + 1;
         curGameData.player1Rep = state.playerRep;
         setLoad(1);
-        console.log(curGameData);
       }
     }, 500);
     return null; //clean up
@@ -131,9 +130,6 @@ function BoardFrame(props) {
             isReverted: props.isReverted,
             setRevert: props.setRevert,
           }}
-          /*rollState={props.rollState}
-          isReverted={props.isReverted}
-          setRevert={props.setRevert}*/
         />
       </div>
     </>
@@ -173,16 +169,16 @@ function Dice(props) {
       if (DEV.DEBUG) console.log("Rolling...");
       const val = Logic.game.randomDiceValue();
       setIndex((curVal) => val);
-      dice.rolVal = val;
+      dice.rolVal = val + 1; //index
     }, time);
 
     setTimeout(() => {
       if (DEV.DEBUG) console.log("Roll End");
       clearInterval(rollingDice);
       setRollStatus(false);
-      props.data.dice1 = dice.rolVal + 1;
+      props.data.dice1 = dice.rolVal;
       props.data.turns++;
-      props.data.cell1Pos = props.data.cell1Pos + dice.rolVal + 1;
+      props.data.cell1Pos = props.data.cell1Pos + dice.rolVal;
       props.data.unit1Pos = Logic.game.convertSingleCelltoBoardPos(
         props.data.cell1Pos
       );

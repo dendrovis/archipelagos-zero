@@ -424,9 +424,9 @@ export const getDiceData = {
 
 function randomDiceValue() {
   const min = 0;
-  const max = 5;
+  const max = 6;
   const val = Math.floor(Math.random() * max + min);
-  console.log(`Roll Value: ${val + 1}`);
+  if (DEV.DEBUG) console.log(`Roll Value: ${val + 1}`);
   return val;
 }
 
@@ -469,8 +469,8 @@ function convertCellListtoBoardPos(dataList) {
 
 export function convertSingleCelltoBoardPos(data) {
   const arr = [];
-  arr.push((data - 1) % 10);
-  arr.push(10 - Math.ceil(data / 10));
+  arr.push(Math.abs(Math.ceil(data - 1 + 0.1)) % 10);
+  arr.push(10 - Math.ceil(data / 10 + 0.1));
   if (DEV.DEBUG) console.log(`Converted: ${data} to ${arr}`);
   return arr;
 }
@@ -480,3 +480,16 @@ export function getJumpList() {
 }
 
 export { fixedJumpCells, convertCellListtoBoardPos };
+
+export function getJumpCell(cellValue) {
+  /// get the jumplist
+  const jumpCellsList = fixedJumpCells();
+  let newPosVal = -1;
+  jumpCellsList.forEach((jumpTarget) => {
+    /// get jump source
+    if (cellValue === jumpTarget[0]) {
+      newPosVal = jumpTarget[1];
+    }
+  });
+  return newPosVal;
+}

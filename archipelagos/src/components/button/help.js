@@ -16,7 +16,6 @@ export default function Help(props) {
 
   function buttonClicked() {
     setToggle(!toggle);
-    console.log("Clicked");
   }
 
   return (

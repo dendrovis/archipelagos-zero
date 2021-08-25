@@ -30,37 +30,76 @@ export default function CanvasHighlight({ data, state }) {
   const [canvasConfig, setCanvasConfig] = useState(null);
 
   /// Moving Unit Animation
-  const delayLoop = ({ index, context, start, stepSize, cellValue }) => {
+  const delayLoop = ({
+    index,
+    context,
+    start,
+    stepSize,
+    cellValue,
+    reverse,
+  }) => {
     //!--- Cannot pass as timeout constant - resource release problem
     setTimeout(() => {
       /// Draw Highlight
       if (index < data.dice1) {
-        console.log("Unit Highlighting");
+        if (DEV.DEBUG) console.log("Unit Highlighting");
+        /// Check if highlight is beyond max compute new cell value
+        let drawCellValue = -1;
+        let finalValue = false;
+        if (cellValue > 100) {
+          drawCellValue = 100 - (cellValue - 100); //+ 1 because reverse to 99 instead of 100
+          finalValue = true;
+        } else {
+          drawCellValue = cellValue;
+        }
+
         Canvas.drawHighlight({
           context: context,
           start: start,
           stepSize: stepSize,
-          cellValue: cellValue,
-          finalValue: false,
+          cellValue: drawCellValue,
+          finalValue: finalValue,
         });
+
         delayLoop({
           index: (index += 1),
           context,
           start,
           stepSize,
           cellValue: (cellValue += 1),
+          reverse,
         });
       } else if (index === data.dice1) {
-        /// Final Value
+        let drawCellValue = -1;
+        if (cellValue > 100) {
+          drawCellValue = 100 - (cellValue - 100); //+ 1 because reverse to 99 instead of 100
+        } else {
+          drawCellValue = cellValue;
+        }
         Canvas.drawHighlight({
           context: context,
           start: start,
           stepSize: stepSize,
-          cellValue: cellValue,
+          cellValue: drawCellValue,
           finalValue: true,
         });
-      } else {
-        console.log("Unit Highlight Stop");
+        if (DEV.DEBUG) console.log("Unit Highlight Stop");
+        if (DEV.DEBUG) console.log("Is Jump Cell?");
+        const jumpCellValue = Logic.game.getJumpCell(data.cell1Pos);
+        if (jumpCellValue !== -1) {
+          if (DEV.DEBUG) console.log("Yes");
+
+          if (DEV.DEBUG) console.log(`To ${jumpCellValue}`);
+          Canvas.drawHighlight({
+            context: context,
+            start: start,
+            stepSize: stepSize,
+            cellValue: jumpCellValue,
+            finalValue: true,
+          });
+        } else {
+          if (DEV.DEBUG) console.log("No");
+        }
       }
     }, 150);
 
@@ -71,24 +110,36 @@ export default function CanvasHighlight({ data, state }) {
   const drawHighLightNEffect = ({ context, start, stepSize }) => {
     /// Dice never roll before or else
     if (data.dice1 === -1) {
-      console.log("Draw Unit Ini");
       /// No Highlight
     } else {
-      console.log("Draw Highlight Again");
-      /// Draw Highlight
+      if (DEV.DEBUG) console.log("Draw Highlight");
+      /// Check if beyond 100
+      if (DEV.DEBUG) console.log(data.cell1Pos);
 
       /// Get Prev Value
-      const prevCellValue = data.cell1Pos - data.dice1 + 1;
+      let prevCellValue;
+      if (!state.isReverted) {
+        prevCellValue = data.cell1Pos - data.dice1;
+      } else {
+        prevCellValue = 100 - (data.cell1Pos + data.dice1 - 100);
+      }
       let index = 0;
 
       /// Execute Animation
-      delayLoop({ index, context, start, stepSize, cellValue: prevCellValue });
+      delayLoop({
+        index,
+        context,
+        start,
+        stepSize,
+        cellValue: prevCellValue,
+        reverse: state.isReverted,
+      });
     }
   };
 
   /// After Rendered (Once)
   useEffect(() => {
-    if (DEV.DEBUG) console.log("Unit Render Once");
+    if (DEV.DEBUG) console.log("Highlight Render Setup");
     const [canvasCtx, frameWidth] = Canvas.buildCanvas(canvasFrameRef);
     const [start, end, stepSize, stepCount] = Canvas.buildGrid(frameWidth);
 
@@ -111,7 +162,7 @@ export default function CanvasHighlight({ data, state }) {
 
   /// Render Again
   useEffect(() => {
-    console.log("Unit Render Again");
+    if (DEV.DEBUG) console.log("Highlight Render Again");
 
     if (rollUpdate > 0) {
       Canvas.clear({ context: canvasConfig.context });
@@ -134,123 +185,3 @@ export default function CanvasHighlight({ data, state }) {
     />
   );
 }
-
-/*
-/// Highlight Layer
-function CanvasHighlight2(props) {
-  const canvasFrameRef = useRef(null);
-  /// Render
-  useEffect(() => {
-    if (props.rollState > 0) {
-      if (DEV.DEBUG) console.log("Render Highlight");
-      /// find previous cell by substract dice value
-      const prevCellVal = props.data.cell1Pos - props.data.dice1;
-
-      /// Set canvas Size
-      const width = window.innerHeight;
-      const canvasFrame = canvasFrameRef.current;
-      canvasFrame.width = width;
-      canvasFrame.height = width;
-      const context = canvasFrame.getContext("2d");
-
-      const stepCount = 12;
-      const newStepCount = stepCount;
-      const unitSize = width / 80;
-      //const stepSize = width / stepCount;
-
-      /// New Frame Size
-      const newWidth = (width / stepCount) * newStepCount;
-      const newStepSize = newWidth / newStepCount;
-      //const end = newWidth - newStepSize * 2;
-      const start = newStepSize;
-      const offset = newStepSize / 2;
-
-      /// get all middle position cell
-      if (!props.isReverted) {
-        if (DEV.DEBUG) console.log("[HIGHLIGHT] Non-Revert Mode");
-        for (
-          let index = prevCellVal + 1;
-          index <= props.data.cell1Pos;
-          index++
-        ) {
-          /// Convert to pos value & plot
-          const pos = Logic.game.convertSingleCelltoBoardPos(index);
-          const indexX = pos[0] + 1;
-          const indexY = pos[1] + 1;
-          context.fillStyle = "orange";
-          context.beginPath();
-          if (index < props.data.cell1Pos) {
-            context.arc(
-              start * indexX + offset,
-              start * indexY + offset,
-              unitSize,
-              0,
-              2 * Math.PI
-            );
-            context.fill();
-          } else {
-            context.lineWidth = 3;
-            context.strokeStyle = "orange";
-            context.arc(
-              start * indexX + offset,
-              start * indexY + offset,
-              unitSize + 20,
-              0,
-              2 * Math.PI
-            );
-            context.stroke();
-          }
-        }
-      } else {
-        if (DEV.DEBUG) console.log("[HIGHLIGHT] Revert Mode");
-        for (let index = props.data.cell1Pos; index <= 100; index++) {
-          /// Convert to pos value & plot
-          const pos = Logic.game.convertSingleCelltoBoardPos(index);
-          const indexX = pos[0] + 1;
-          const indexY = pos[1] + 1;
-          context.fillStyle = "orange";
-          context.beginPath();
-          if (index > props.data.cell1Pos) {
-            context.arc(
-              start * indexX + offset,
-              start * indexY + offset,
-              unitSize,
-              0,
-              2 * Math.PI
-            );
-            context.fill();
-          } else {
-            context.lineWidth = 3;
-            context.strokeStyle = "orange";
-            context.arc(
-              start * indexX + offset,
-              start * indexY + offset,
-              unitSize + 20,
-              0,
-              2 * Math.PI
-            );
-            context.stroke();
-          }
-        }
-
-        props.setRevert(false);
-      }
-
-      props.highlightState((val) => (val = val + 1));
-    }
-
-    return () => {};
-  }, [props.rollState]);
-
-  return (
-    <canvas
-      ref={canvasFrameRef}
-      className={Classes.canvas_cell_highlight}
-      width="37.5vw"
-      height="37.5vw"
-    />
-  );
-}
-
-
-*/

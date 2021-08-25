@@ -107,7 +107,9 @@ export function drawUnit({
   playerRep,
   offset,
 }) {
-  const [indexX, indexY] = Logic.game.convertSingleCelltoBoardPos(cellValue);
+  const [indexX, indexY] = Logic.game.convertSingleCelltoBoardPos(
+    (cellValue -= 1)
+  ); /// normalise
   const unitSize = stepSize / 6;
   context.fillStyle = getColor(playerRep);
   context.beginPath();
@@ -276,7 +278,9 @@ export function drawHighlight({
   finalValue,
 }) {
   /// Convert to pos value & plot
-  const [indexX, indexY] = Logic.game.convertSingleCelltoBoardPos(cellValue);
+  const [indexX, indexY] = Logic.game.convertSingleCelltoBoardPos(
+    cellValue - 1
+  );
   let unitSize = -1;
   !finalValue ? (unitSize = stepSize / 7) : (unitSize = stepSize / 3.5);
   const offset = stepSize / 2;

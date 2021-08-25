@@ -9,7 +9,7 @@ export default function Representor(props) {
   const [selectRep3, setRep3] = useState(false);
   const [selectRep4, setRep4] = useState(false);
   function selectedRep(e) {
-    console.log(e.target.id);
+    if (DEV.DEBUG) console.log(e.target.id);
     switch (Number(e.target.id)) {
       case 0:
         if (selectRep1) {
