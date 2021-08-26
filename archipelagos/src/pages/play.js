@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /// REACT Package
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
 /// Styling
@@ -98,25 +98,27 @@ function Content(props) {
           {STATIC.DATA.PLAY_PAGE_TITLE}
         </h1>
       </div>
-      <div>
-        <BoardFrame
+      <RollingController>
+        <div>
+          <BoardFrame
+            data={props.data}
+            rollState={props.rollState}
+            isReverted={props.isReverted}
+            setRevert={props.setRevert}
+            setDiceRoll={props.setRoll}
+            //setRollStatus={props.setRollStatus}
+          />
+        </div>
+        <Dice
           data={props.data}
-          rollState={props.rollState}
-          isReverted={props.isReverted}
-          setRevert={props.setRevert}
-          setDiceRoll={props.setRoll}
+          endState={props.setEndState}
+          setDiceRoll={props.setDiceRoll}
           //setRollStatus={props.setRollStatus}
+          diceToggle={props.diceToggle}
+          setRevert={props.setRevert}
+          //rolling={props.rolling}
         />
-      </div>
-      <Dice
-        data={props.data}
-        endState={props.setEndState}
-        setDiceRoll={props.setDiceRoll}
-        //setRollStatus={props.setRollStatus}
-        diceToggle={props.diceToggle}
-        setRevert={props.setRevert}
-        //rolling={props.rolling}
-      />
+      </RollingController>
       <>
         <OverlaySection />
         <ScoreBoardController />
@@ -160,19 +162,44 @@ function OverlaySection() {
   );
 }
 
+const RollingContext = createContext(null);
+
+export { RollingContext };
+
+/// Control dice roll function
+export function RollingController({ children }) {
+  const [rollStatus, setRollState] = useState(false);
+  console.log(`Running Roll Controller \n RollStatus: ${rollStatus}`);
+
+  return (
+    <RollingContext.Provider value={[rollStatus, setRollState]}>
+      {children}
+    </RollingContext.Provider>
+  );
+}
+
 function Dice(props) {
   const dice = { rolVal: -1 };
   const { data, meta, ini } = Logic.game.getDiceData;
   const [index, setIndex] = useState(ini);
-  const [rolling, setRollStatus] = useState(false);
+  //const [rolling, setRollStatus] = useState(false);
 
-  function rollDice() {
+  /// Context State
+  const [rollStatus, setRollState] = useContext(RollingContext);
+  console.log(`Running Dice Controller\nRollStatus: ${rollStatus}`);
+
+  const rollDice = React.useCallback(() => {
+    if (rollStatus) {
+      console.log("Blocked", rollStatus);
+      return null;
+    }
+
     const time = 100;
     const timeout = 500;
 
     if (DEV.DEBUG) console.log("[Click] Dice");
-
-    setRollStatus(true);
+    setRollState(true);
+    //setRollStatus(true);
     //props.setRollStatus(true);
     const rollingDice = setInterval(function (time) {
       if (DEV.DEBUG) console.log("Rolling...");
@@ -184,7 +211,7 @@ function Dice(props) {
     setTimeout(() => {
       if (DEV.DEBUG) console.log("Roll End");
       clearInterval(rollingDice);
-      setRollStatus(false);
+      //setRollStatus(false);
       props.data.dice1 = dice.rolVal;
       props.data.turns++;
       props.data.cell1Pos = props.data.cell1Pos + dice.rolVal;
@@ -204,14 +231,18 @@ function Dice(props) {
       if (DEV.DEBUG) console.log(`[Rolled] Obj Value ${dice.rolVal + 1}`);
       if (DEV.DEBUG) console.log(props.data);
     }, timeout);
-  }
+  }, [rollStatus]);
 
   function pending() {
     console.log("Pending");
   }
 
   return (
-    <div onClick={rolling ? pending : rollDice} className={Classes.dice_holder}>
+    <div
+      //onClick={rollStatus || rolling ? pending : rollDice}
+      onClick={rollDice}
+      className={Classes.dice_holder}
+    >
       <img className={Classes.diceSize} src={data[index]} alt={meta[index]} />
     </div>
   );

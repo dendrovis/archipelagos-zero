@@ -9,10 +9,12 @@ import * as Canvas from "./canvasManager";
 import * as Logic from "../../engine/_export";
 
 /// Hooks
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useContext } from "react";
 
 /// DEBUG
 import * as DEV from "../../config/debug";
+
+import { RollingContext } from "../../pages/play";
 
 //const singleCtx
 
@@ -23,6 +25,9 @@ export default function CanvasUnit({ data, state }) {
   /// State Track
   const rollUpdate = state.rollState;
   //const setRollStatus = state.setRollStatus;
+  /// Context State
+  const [rollStatus, setRollState] = useContext(RollingContext);
+  console.log(`Running Canvas Unit Controller \n RollStatus: ${rollStatus}`);
 
   /// Callback Fn
   let timeOut;
@@ -48,6 +53,7 @@ export default function CanvasUnit({ data, state }) {
       } else {
         drawCellValue = prevCellValue;
       }
+
       /// Draw Unit
       Canvas.drawUnit({
         context: context,
@@ -57,6 +63,7 @@ export default function CanvasUnit({ data, state }) {
         playerRep: data.player1Rep,
         offset: offset,
       });
+
       if (index < data.dice1) {
         if (DEV.DEBUG) console.log(`Unit Moving ${drawCellValue}`);
 
@@ -84,6 +91,10 @@ export default function CanvasUnit({ data, state }) {
             playerRep: data.player1Rep,
             offset: offset,
           });
+          console.log("Final Draw2");
+          setRollState(false);
+
+          //setRollState(false);
         }
 
         ///  If it is a Jump Cell Loop once to clear the Unit
@@ -99,6 +110,8 @@ export default function CanvasUnit({ data, state }) {
           });
         } else {
           if (DEV.DEBUG) console.log("No");
+          console.log("Final Draw2");
+          setRollState(false);
         }
       }
     }, 300);
@@ -131,7 +144,8 @@ export default function CanvasUnit({ data, state }) {
       let index = 0;
 
       /// Execute Animation
-      delayLoop({ index, context, start, stepSize, prevCellValue, offset });
+      if (rollStatus)
+        delayLoop({ index, context, start, stepSize, prevCellValue, offset });
       //!----- set false without rerun that part
       //console.log("helo");
       //setRollStatus(false);
@@ -184,3 +198,4 @@ export default function CanvasUnit({ data, state }) {
     />
   );
 }
+//26.30
