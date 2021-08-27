@@ -36,7 +36,7 @@ export default function CanvasUnit({ data, state }) {
   const [canvasConfig, setCanvasConfig] = useState(null);
 
   /// Moving Unit Animation
-  const delayLoop = ({
+  /*const delayLoop = ({
     index,
     context,
     start,
@@ -115,7 +115,7 @@ export default function CanvasUnit({ data, state }) {
         }
       }
     }, 300);
-  };
+  };*/
 
   /// Draw Unit and Animation
   const drawUnitNEffect = ({ context, start, stepSize }) => {
@@ -131,7 +131,9 @@ export default function CanvasUnit({ data, state }) {
         playerRep: data.player1Rep,
         offset: offset,
       });
-    } else {
+    }
+    const drawAgain = () => {
+      setRollState(false);
       if (DEV.DEBUG) console.log("Draw Unit Again");
 
       /// Get Prev Value
@@ -143,14 +145,48 @@ export default function CanvasUnit({ data, state }) {
       }
       let index = 0;
 
-      /// Execute Animation
-      if (rollStatus)
-        delayLoop({ index, context, start, stepSize, prevCellValue, offset });
+      //delayLoop({ index, context, start, stepSize, prevCellValue, offset });
+      console.log("RUNNN");
+      /// The time interval must be
+      const interval = setInterval(() => {
+        index++;
+        console.log(index);
+        if (index >= 3) {
+          clearInterval(interval);
+        }
+      }, 300);
+    };
+
+    //const dice = React.useMemo(drawAgain, [rollStatus]);
+    /*
+    else if (rollStatus) {
+      setRollState(false);
+      if (DEV.DEBUG) console.log("Draw Unit Again");
+
+      /// Get Prev Value
+      let prevCellValue;
+      if (!state.isReverted) {
+        prevCellValue = data.cell1Pos - data.dice1;
+      } else {
+        prevCellValue = 100 - (data.cell1Pos + data.dice1 - 100);
+      }
+      let index = 0;
+
+      //delayLoop({ index, context, start, stepSize, prevCellValue, offset });
+      console.log("RUNNN");
+      /// The time interval must be
+      const interval = setInterval(() => {
+        index++;
+        console.log(index);
+        if (index >= 3) {
+          clearInterval(interval);
+        }
+      }, 300);
+
       //!----- set false without rerun that part
-      //console.log("helo");
-      //setRollStatus(false);
-      //console.log("helo2");
-    }
+    } else {
+      console.log("It has being BLOCK");
+    }*/
   };
 
   /// After Rendered (Once)

@@ -195,7 +195,7 @@ function Dice(props) {
     }
 
     const time = 100;
-    const timeout = 500;
+    const timeout = 1000;
 
     if (DEV.DEBUG) console.log("[Click] Dice");
     setRollState(true);
@@ -208,6 +208,7 @@ function Dice(props) {
       dice.rolVal = val + 1; //index
     }, time);
 
+    /// Block for the time being
     setTimeout(() => {
       if (DEV.DEBUG) console.log("Roll End");
       clearInterval(rollingDice);
@@ -228,6 +229,7 @@ function Dice(props) {
           console.log(`[Cell > 100] Revert ${props.data.cell1Pos}`);
       }
       props.setDiceRoll((val) => val + 1);
+      console.log("Rolled Dice");
       if (DEV.DEBUG) console.log(`[Rolled] Obj Value ${dice.rolVal + 1}`);
       if (DEV.DEBUG) console.log(props.data);
     }, timeout);

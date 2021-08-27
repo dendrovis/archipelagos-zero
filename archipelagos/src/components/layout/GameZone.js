@@ -26,7 +26,9 @@ export default function GameZone({ data, state }) {
     <>
       <CanvasBoard />
       <CanvasPlayer data={data} />
-      <CanvasHighlight data={data} state={state} />
+      {
+        //     <CanvasHighlight data={data} state={state} />
+      }
       <CanvasUnit data={data} state={state} />
     </>
   );
