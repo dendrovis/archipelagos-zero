@@ -240,13 +240,14 @@ function Dice(props) {
   }
 
   return (
-    <div
+    <button onClick={rollDice} className={Classes.dice_holder} disabled="true">
+      <div
+
       //onClick={rollStatus || rolling ? pending : rollDice}
-      onClick={rollDice}
-      className={Classes.dice_holder}
-    >
-      <img className={Classes.diceSize} src={data[index]} alt={meta[index]} />
-    </div>
+      >
+        <img className={Classes.diceSize} src={data[index]} alt={meta[index]} />
+      </div>
+    </button>
   );
 }
 
