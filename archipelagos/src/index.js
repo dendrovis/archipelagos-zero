@@ -1,15 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-import { BrowserRouter } from "react-router-dom";
-import "./css/index.css";
+/**@summary 1st file where JS Engine will find*/
 
-ReactDOM.render(
-  <React.StrictMode>
+/** React Packages */
+import { StrictMode } from "react";
+import { render } from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+
+/** App Component */
+import App from "./App";
+
+/** Default Styling */
+import "./common/index.css";
+
+/** Render from root element */
+render(
+  <StrictMode>
     <BrowserRouter>
       <App />
     </BrowserRouter>
-  </React.StrictMode>,
-
+  </StrictMode>,
   document.getElementById("root")
 );

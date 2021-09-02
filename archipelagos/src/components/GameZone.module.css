@@ -1,0 +1,103 @@
+.canvas {
+  border: 1px solid #000000;
+  background-image: url("../../assets/img/png/board_1_1000x1000.png");
+}
+
+.canvas_grid {
+  /*align-self: center;
+    justify-self: center;*/
+  left: 32.5%;
+  top: 5%;
+  width: 37vw;
+  height: 37vw;
+  max-height: 80%;
+  border: 1px solid #ff0000;
+  /*background-size: contain;*/
+  position: absolute;
+  z-index: 1;
+  /*background-image: url("../../assets/img/png/board_1_1000x1000.png");*/
+}
+
+.canvas_cell_highlight {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 3;
+  max-width: 60%;
+  max-height: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  border: 4px solid transparent;
+}
+
+.canvas_unit {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 4;
+  max-width: 60%;
+  max-height: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  border: 3px solid transparent;
+}
+
+.canvas_player {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 2;
+  max-width: 60%;
+  max-height: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  border: 3px solid transparent;
+}
+
+.canvas_board {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+  position: absolute;
+  max-width: 60%;
+  max-height: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  border: 3px solid #420303;
+  border-radius: 50px;
+  background-image: url("../../assets/img/jpg/board_1_bg.jpg");
+  -webkit-box-shadow: 2px 11px 20px -3px rgba(0, 0, 0, 0.72);
+  box-shadow: 2px 11px 20px -3px rgba(0, 0, 0, 0.72);
+}
+
+.canvas_frame {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 99;
+  position: absolute;
+  max-width: 60%;
+  max-height: 95%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  margin-bottom: auto;
+  border: 4px solid black;
+}
