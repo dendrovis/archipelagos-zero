@@ -1,5 +1,11 @@
 /** React Packages */
-import React, { useState, useContext, createContext } from "react";
+import React, {
+  useState,
+  useContext,
+  createContext,
+  useRef,
+  useEffect,
+} from "react";
 
 /** Styling */
 import Classes from "./Dice.module.css";
@@ -9,6 +15,7 @@ import * as Logic from "../engine/_export";
 
 /** Debug */
 import * as DEV from "../config/debug";
+import { setInterval } from "timers";
 
 export const RollingContext = createContext(null);
 
@@ -81,10 +88,6 @@ export default function Dice(props) {
     }, timeout);
   }, [rollStatus]);
 
-  function pending() {
-    console.log("Pending");
-  }
-
   return (
     <button onClick={rollDice} className={Classes.dice_holder} disabled="true">
       <div
@@ -95,4 +98,84 @@ export default function Dice(props) {
       </div>
     </button>
   );
+}
+
+/**
+ * Dice of the game
+ */
+function MockDice() {
+  //!-- Noise
+  const { data, meta, ini } = Logic.game.getDiceData;
+  //!--
+
+  const diceVal = useDice();
+
+  function testDice() {
+    //talk to useDice internal stuff
+  }
+  return (
+    <button onClick={testDice} className={Classes.dice_holder} disabled="true">
+      <img
+        className={Classes.diceSize}
+        src={data[diceVal]}
+        alt={meta[diceVal]}
+      />
+    </button>
+  );
+}
+
+/**
+ * Fire Dice Rendering Process
+ * @returns
+ */
+function useDice() {
+  /** Global APIs */
+  //const engineCtx = useContext(Context.Engine);
+  /** Local APIs */
+  //const [curDiceVal, setDiceVal] = useState(engineCtx.getRandomDiceValue)
+  //const rollingIntervalRef = useRef(null);
+  /** Clean Up */
+  // useEffect(() => {
+  //   return () => {
+  //      clearInterval(rollingIntervalRef.current)
+  //   }
+  // }, [])
+  /** Run Interval Function */
+  //   index = constant.iniCount;
+  //   rollingIntervalRef.current = setInterval(() => { setDiceVal(engine.Ctx.getRandomDiceValue) until terminal condition }, constant.timeInterval)
+  //
+  //
+  //return curDiceVal;
+}
+
+/**
+ * Fire Dice Rendering Process
+ * @returns
+ */
+function useDiceRedux() {
+  const rollingIntervalRef = useRef(null);
+
+  const dispatchBundler = () => {
+    const curDiceVal = dispatchDice();
+    dispatchRollingEffect(curDiceVal);
+  };
+
+  const dispatchDice = () => {
+    // Dispatch ToggleLocker
+    // Dispatch ComputeDiceValue
+    // Return ComputedDiceValue From Store
+  };
+
+  const dispatchRollingEffect = (curDiceVal) => {
+    //rollingIntervalRef.current = setInterval()
+    //--------- Dispatch RollingDiceInterval(curDiceVal) return promise --> Dispatch Side Effect -> return promise Dispatch ToggleLocker to release
+  };
+
+  useEffect(() => {
+    return () => {
+      //clearInterval(rollingInterval.current)
+    };
+  }, []);
+
+  return null;
 }

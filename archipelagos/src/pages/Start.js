@@ -13,6 +13,9 @@ import * as data from "../common/data";
 /** Debug */
 import * as DEV from "../config/debug";
 
+/** Redux */
+import { connect } from "react-redux";
+
 /**
  * Content of the start page
  * @returns {JSX.Element} Start Page Content Component

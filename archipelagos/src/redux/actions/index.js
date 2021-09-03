@@ -1,4 +1,4 @@
-import { typeValue } from "../static/constant.js";
+import { typeValue } from "../common/constant.js";
 
 /// This are action that loading , intermediate dispatch
 /// START PAGE
