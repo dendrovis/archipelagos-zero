@@ -1,7 +1,10 @@
-import Routes from "./routing/route.js";
+/** React Packages */
+import Routes from "./route/route.js";
 
-function App() {
-  return <Routes></Routes>;
+/**
+ * This is the main application component
+ * @returns {JSX.Element} Routes component
+ */
+export default function App() {
+  return <Routes />;
 }
-
-export default App;
