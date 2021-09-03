@@ -1,21 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/// Styling
-import Classes from "../../css/layout/gamezone.module.css";
-
-/// Canvas Manager
-import * as Canvas from "./canvasManager";
-
-/// Logic
-import * as Logic from "../../engine/_export";
-
-/// Hooks
+/** React Packages */
 import { useRef, useEffect, useState } from "react";
 
-/// DEBUG
+/** Styling */
+import Classes from "./GameZone.module.css";
+
+/** Provider */
+import * as Canvas from "../engine/canvasManager";
+import * as Logic from "../../engine/_export";
+
+/** Debug */
 import * as DEV from "../../config/debug";
 
 //const singleCtx
 
+/**
+ * This represent the highlight of the unit
+ * @param {*} param0
+ * @returns
+ */
 export default function CanvasHighlight({ data, state }) {
   /// References
   const canvasFrameRef = useRef(null);

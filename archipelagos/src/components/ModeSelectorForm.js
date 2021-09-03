@@ -1,13 +1,21 @@
-import React, { useState } from "react";
-import Classes from "../../css/form/mode_selector.module.css";
+/** React Packages */
+import { useState } from "react";
 
-/// Asset Package
-import * as IMAGE from "../../assets/img/index";
+/** Styling */
+import Classes from "./ModeSelectorForm.module.css";
 
-/// DEBUG
-import * as DEV from "../../config/debug";
+/** Asset Packages */
+import * as IMAGE from "../assets/img/index";
 
-export default function ModeSelector(props) {
+/** Debug */
+import * as DEV from "../config/debug";
+
+/**
+ * Allow multiple choice to select a representation
+ * @param {*} props
+ * @returns {JSX.Element}
+ */
+export default function ModeSelectorForm(props) {
   const [selectSingle, setSingleToggle] = useState(false);
   const [selectMulti, setMultiToggle] = useState(false);
 

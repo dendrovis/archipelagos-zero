@@ -2,10 +2,10 @@
 import * as IMAGE from "../assets/img/index";
 
 /** Styling */
-import Classes from "./Start.module.css";
+import Classes from "./Cover.module.css";
 
 /** Common Packages */
-import data from "../common/data";
+import * as data from "../common/data";
 
 /**
  * Cover section of the content

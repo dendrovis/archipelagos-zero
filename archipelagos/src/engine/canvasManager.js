@@ -1,8 +1,8 @@
 /// Logic
-import * as Logic from "../../engine/_export";
+import * as Logic from "../engine/_export";
 
 /// DEBUG
-import * as DEV from "../../config/debug";
+import * as DEV from "../config/debug";
 
 export function getCanvasContext({ ref }) {
   return ref.current.getContext("2d");

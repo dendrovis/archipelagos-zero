@@ -1,12 +1,17 @@
-/// Styling
-import Classes from "../../css/layout/gamezone.module.css";
-
-/// Canvas Manager
-import * as Canvas from "./canvasManager";
-
-/// Hooks
+/** React Packages */
 import { useRef, useEffect, useCallback } from "react";
 
+/** Styling */
+import Classes from "./GameZone.module.css";
+
+/** Provider */
+import * as Canvas from "../engine/canvasManager";
+
+/**
+ * Represent the player information components of the game board
+ * @param {*} param0
+ * @returns
+ */
 export default function CanvasPlayer({ data }) {
   /// References
   const canvasFrameRef = useRef(null);

@@ -1,15 +1,17 @@
-/// Styling
-import Classes from "../../css/layout/gamezone.module.css";
-
-/// Canvas Manager
-import * as Canvas from "./canvasManager";
-
-/// Logic
-import * as Logic from "../../engine/_export";
-
-/// Hooks
+/** React Packages */
 import { useRef, useEffect } from "react";
 
+/** Styling */
+import Classes from "./GameZone.module.css";
+
+/** Provider */
+import * as Canvas from "../engine/canvasManager";
+import * as Logic from "../engine/_export";
+
+/**
+ * Represent background frame of the game board
+ * @returns {JSX.Element}
+ */
 export default function CanvasBoard() {
   /// References
   const canvasFrameRef = useRef(null);

@@ -1,10 +1,15 @@
-import React from "react";
-import Classes from "../../css/form/error.module.css";
+/** Assets Packages */
+import * as IMAGE from "../assets/img/index";
 
-/// Asset Package
-import * as IMAGE from "../../assets/img/index";
+/** Styling */
+import Classes from "./ErrorForm.module.css";
 
-export default function Error(props) {
+/**
+ * Display error message and representative image
+ * @param {*} props
+ * @returns {JSX.Element}
+ */
+export default function ErrorForm(props) {
   return (
     <div>
       <div className={Classes.containerAlign}>

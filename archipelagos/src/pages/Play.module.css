@@ -52,7 +52,7 @@
   align-content: center;*/
   width: 100%;
   height: 94%;
-  background-image: url("../../assets/img/jpg/shore_bg.jpg");
+  background-image: url("../assets/img/jpg/shore_bg.jpg");
 }
 
 .scoreboard_icon {
@@ -79,25 +79,6 @@
   border-radius: 10px;
   background-color: rgb(255, 255, 255);
   border-color: maroon;
-}
-
-.dice_holder {
-  position: absolute;
-  bottom: 5%;
-  right: 20%;
-  transition: transform 0.2s;
-  padding: 0;
-  border: none;
-  background: none;
-}
-
-.dice_holder:hover {
-  transform: scale(1.1);
-}
-
-.diceSize {
-  width: 10vh;
-  height: 10vh;
 }
 
 .scoreboard_container {

@@ -1,25 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/// REACT Package
-import React, { useState, useEffect, createContext, useContext } from "react";
+/** React Packages */
+import React, { useState, useEffect, createContext } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 
-/// Styling
-import Classes from "../css/pages/play.module.css";
-import GlobalClasses from "../css/global.module.css";
-
+/** Styling */
+import Classes from "./Play.module.css";
+import GlobalClasses from "../common/global.module.css";
 import { FaRegChartBar } from "react-icons/fa";
 
-/// Component Package
-import * as Component from "../components/component";
+/** Component Packages */
+import * as Component from "../components/index";
 
-/// Static Package
-import * as STATIC from "../static/_export";
+/** Common Packages */
+import * as data from "../common/data";
 
-/// Logic
+/** Logic */
 import * as Logic from "../engine/_export";
 
-/// DEBUG
+/** Debug */
 import * as DEV from "../config/debug";
+
+/** Provider */
+import * as Provider from "../components/Dice";
 
 export default function Play(props) {
   const curGameData = Logic.game.iniGameData;
@@ -69,7 +71,7 @@ export default function Play(props) {
 
   switch (isLoaded) {
     case 0:
-      return <Component.Form.Loading />;
+      return <Component.LoadingForm />;
     case 1:
       return (
         <Content
@@ -86,7 +88,7 @@ export default function Play(props) {
         />
       );
     default:
-      return <Component.Form.Error msg="Access Denied" />;
+      return <Component.ErrorForm msg="Access Denied" />;
   }
 }
 
@@ -95,10 +97,10 @@ function Content(props) {
     <div>
       <div>
         <h1 className={Classes.subtitle + " " + Classes.subtitleContainer}>
-          {STATIC.DATA.PLAY_PAGE_TITLE}
+          {data.PLAY_PAGE_TITLE}
         </h1>
       </div>
-      <RollingController>
+      <Provider.RollingController>
         <div>
           <BoardFrame
             data={props.data}
@@ -109,7 +111,7 @@ function Content(props) {
             //setRollStatus={props.setRollStatus}
           />
         </div>
-        <Dice
+        <Component.Dice
           data={props.data}
           endState={props.setEndState}
           setDiceRoll={props.setDiceRoll}
@@ -118,9 +120,9 @@ function Content(props) {
           setRevert={props.setRevert}
           //rolling={props.rolling}
         />
-      </RollingController>
+      </Provider.RollingController>
       <>
-        <OverlaySection />
+        <Component.Overlay />
         <ScoreBoardController />
         {props.endState ? <GameOverOverlay /> : <></>}
       </>
@@ -132,7 +134,7 @@ function BoardFrame(props) {
   return (
     <>
       <div className={Classes.canvas_container}>
-        <Component.Layout.GameZone
+        <Component.GameZone
           data={props.data}
           state={{
             rollState: props.rollState,
@@ -143,111 +145,6 @@ function BoardFrame(props) {
         />
       </div>
     </>
-  );
-}
-
-function OverlaySection() {
-  return (
-    <>
-      <Component.Button.Help
-        tooltip={STATIC.DATA.GLOBAL_HELP_TOOLTIP}
-        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
-      />
-      <Component.Button.Settings
-        tooltip={STATIC.DATA.GLOBAL_SETTINGS_TOOLTIP}
-        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
-      />
-      <div className={GlobalClasses.version}>{DEV.VERSION}</div>
-    </>
-  );
-}
-
-const RollingContext = createContext(null);
-
-export { RollingContext };
-
-/// Control dice roll function
-export function RollingController({ children }) {
-  const [rollStatus, setRollState] = useState(false);
-  console.log(`Running Roll Controller \n RollStatus: ${rollStatus}`);
-
-  return (
-    <RollingContext.Provider value={[rollStatus, setRollState]}>
-      {children}
-    </RollingContext.Provider>
-  );
-}
-
-function Dice(props) {
-  const dice = { rolVal: -1 };
-  const { data, meta, ini } = Logic.game.getDiceData;
-  const [index, setIndex] = useState(ini);
-  //const [rolling, setRollStatus] = useState(false);
-
-  /// Context State
-  const [rollStatus, setRollState] = useContext(RollingContext);
-  console.log(`Running Dice Controller\nRollStatus: ${rollStatus}`);
-
-  const rollDice = React.useCallback(() => {
-    if (rollStatus) {
-      console.log("Blocked", rollStatus);
-      return null;
-    }
-
-    const time = 100;
-    const timeout = 1000;
-
-    if (DEV.DEBUG) console.log("[Click] Dice");
-    setRollState(true);
-    //setRollStatus(true);
-    //props.setRollStatus(true);
-    const rollingDice = setInterval(function (time) {
-      if (DEV.DEBUG) console.log("Rolling...");
-      const val = Logic.game.randomDiceValue();
-      setIndex((curVal) => val);
-      dice.rolVal = val + 1; //index
-    }, time);
-
-    /// Block for the time being
-    setTimeout(() => {
-      if (DEV.DEBUG) console.log("Roll End");
-      clearInterval(rollingDice);
-      //setRollStatus(false);
-      props.data.dice1 = dice.rolVal;
-      props.data.turns++;
-      props.data.cell1Pos = props.data.cell1Pos + dice.rolVal;
-      props.data.unit1Pos = Logic.game.convertSingleCelltoBoardPos(
-        props.data.cell1Pos
-      );
-      /// Handling End State and Beyond End Value
-      if (props.data.cell1Pos === 100) {
-        props.endState((val) => !val);
-      } else if (props.data.cell1Pos > 100) {
-        props.data.cell1Pos = 100 - (props.data.cell1Pos - 100);
-        props.setRevert((val) => true);
-        if (DEV.DEBUG)
-          console.log(`[Cell > 100] Revert ${props.data.cell1Pos}`);
-      }
-      props.setDiceRoll((val) => val + 1);
-      console.log("Rolled Dice");
-      if (DEV.DEBUG) console.log(`[Rolled] Obj Value ${dice.rolVal + 1}`);
-      if (DEV.DEBUG) console.log(props.data);
-    }, timeout);
-  }, [rollStatus]);
-
-  function pending() {
-    console.log("Pending");
-  }
-
-  return (
-    <button onClick={rollDice} className={Classes.dice_holder} disabled="true">
-      <div
-
-      //onClick={rollStatus || rolling ? pending : rollDice}
-      >
-        <img className={Classes.diceSize} src={data[index]} alt={meta[index]} />
-      </div>
-    </button>
   );
 }
 
@@ -277,25 +174,21 @@ function GameOverOverlay() {
               Classes.gameover_title
             }
           >
-            {STATIC.DATA.GLOBAL_GAMEOVER_TITLE}
+            {data.GLOBAL_GAMEOVER_TITLE}
           </h1>
         </div>
         <span>
-          <div className={GlobalClasses.buttonContainer}>
-            <Component.Button.Text
-              event={restartGame}
-              text={STATIC.DATA.GLOBAL_GAMEOVER_BTNTEXT_1}
-            />
-          </div>
+          <Component.SubmitButton
+            event={restartGame}
+            text={data.GLOBAL_GAMEOVER_BTNTEXT_1}
+          />
         </span>
         <div className={GlobalClasses.space}></div>
         <span>
-          <div className={GlobalClasses.buttonContainer}>
-            <Component.Button.Text
-              event={endGame}
-              text={STATIC.DATA.GLOBAL_GAMEOVER_BTNTEXT_2}
-            />
-          </div>
+          <Component.SubmitButton
+            event={endGame}
+            text={data.GLOBAL_GAMEOVER_BTNTEXT_2}
+          />
         </span>
       </div>
     </div>

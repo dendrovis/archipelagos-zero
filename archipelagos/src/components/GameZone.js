@@ -1,12 +1,11 @@
-import React from "react";
-
-/// Components
+/** Components Packages */
 import CanvasBoard from "./CanvasBoard";
 import CanvasUnit from "./CanvasUnit";
 import CanvasPlayer from "./CanvasPlayer";
-import CanvasHighlight from "./CanvasHighlight";
-/// DEBUG
-import * as DEV from "../../config/debug";
+//import CanvasHighlight from "./CanvasHighlight";
+
+/** Debug */
+import * as DEV from "../config/debug";
 
 //const HighlightContext = createContext();
 
@@ -20,6 +19,11 @@ import * as DEV from "../../config/debug";
   );
 }*/
 
+/**
+ * Represent the game mechanism components
+ * @param {*} param0
+ * @returns
+ */
 export default function GameZone({ data, state }) {
   if (DEV.DEBUG) console.log("Load Game Zone");
   return (

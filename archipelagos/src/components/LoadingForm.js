@@ -1,10 +1,14 @@
-import React from "react";
-import Classes from "../../css/form/loading.module.css";
+/** Styling */
+import Classes from "./LoadingForm.module.css";
 
-/// Asset Package
-import * as IMAGE from "../../assets/img/index";
+/** Assets Packages */
+import * as IMAGE from "../assets/img/index";
 
-export default function Loading() {
+/**
+ * Loading Animation
+ * @returns {JSX.Element}
+ */
+export default function LoadingForm() {
   return (
     <div>
       <div className={Classes.containerAlign}>

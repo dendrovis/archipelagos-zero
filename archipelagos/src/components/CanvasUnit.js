@@ -1,23 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/// Styling
-import Classes from "../../css/layout/gamezone.module.css";
-
-/// Canvas Manager
-import * as Canvas from "./canvasManager";
-
-/// Logic
-import * as Logic from "../../engine/_export";
-
-/// Hooks
+/** React Packages */
 import { useRef, useEffect, useState, useContext } from "react";
 
-/// DEBUG
-import * as DEV from "../../config/debug";
+/** Styling */
+import Classes from "./GameZone.module.css";
 
-import { RollingContext } from "../../pages/play";
+/** Provider */
+import * as Canvas from "../engine/canvasManager";
+import * as Logic from "../engine/_export";
 
-//const singleCtx
+/** Debug */
+import * as DEV from "../config/debug";
 
+/** ??? */
+import { RollingContext } from "../components/Dice";
+
+/**
+ * Represent the game components of the game board
+ * @param {*} param0
+ * @returns
+ */
 export default function CanvasUnit({ data, state }) {
   /// References
   const canvasFrameRef = useRef(null);

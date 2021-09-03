@@ -1,8 +1,13 @@
-import React from "react";
-import Classes from "../../css/button/settings.module.css";
+/** Styling */
+import Classes from "./SettingButton.module.css";
 import { FaRegSun } from "react-icons/fa";
 
-export default function Settings(props) {
+/**
+ * Action that display the settings of the application
+ * @param {*} props
+ * @returns
+ */
+export default function SettingButton(props) {
   return (
     <div className={Classes.wrapper + " " + Classes.float_icon_2_container}>
       <div className={Classes.icon + " " + Classes.help}>

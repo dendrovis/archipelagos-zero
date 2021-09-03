@@ -1,10 +1,16 @@
-import React, { useState } from "react";
-import Classes from "../../css/textbox/player_name.module.css";
-import * as logic from "../../engine/_export";
-/// DEBUG
-import * as DEV from "../../config/debug";
+/** React Packages */
+import { useState } from "react";
 
-export default function PlayerName(props) {
+/** Styling */
+import Classes from "./PlayerNameTextBox.module.css";
+
+/** Provider */
+import * as logic from "../engine/_export";
+
+/** Debug */
+import * as DEV from "../config/debug";
+
+export default function PlayerNameTextBox(props) {
   //const contextValue = useContext(PlayerNameContext);
   const [playerName, setName] = useState("hidden");
   const input = (

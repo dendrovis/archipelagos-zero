@@ -1,26 +1,27 @@
-/// REACT Package
-import React, { useState } from "react";
+/** React Packages */
+import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-/// Styling
-import Classes from "../css/pages/creation.module.css";
-import GlobalClasses from "../css/global.module.css";
+/** Styling */
+import Classes from "./Creation.module.css";
+import GlobalClasses from "../common/global.module.css";
 
-/// Storage Control
-//import * as Storage from "../external/api/sessionStorage";
+/** Component Package */
+import * as Component from "../components/index";
 
-/// Component Package
-import * as Component from "../components/component";
+/** Common Packages */
+import * as data from "../common/data";
 
-/// Static Package
-import * as STATIC from "../static/_export";
-
-/// DEBUG
+/** DEBUG */
 import * as DEV from "../config/debug";
 
-/// Logic
+/** Logic */
 import * as Logic from "../engine/_export";
 
+/**
+ * Consist of the user inputs components
+ * @returns {JSX.Element}
+ */
 export default function Creation() {
   const inputField = Logic.field.iniField; // Singleton Object
   if (DEV.DEBUG) console.log("Initialize");
@@ -38,7 +39,7 @@ export default function Creation() {
         <ActionSection input={inputField} />
       </>
       <>
-        <OverlaySection />
+        <Component.Overlay />
       </>
     </>
   );
@@ -48,25 +49,9 @@ function TitleSection() {
   return (
     <div>
       <h1 className={Classes.subtitle + " " + Classes.subtitleContainer}>
-        {STATIC.DATA.CREATION_PAGE_TITLE}
+        {data.CREATION_PAGE_TITLE}
       </h1>
     </div>
-  );
-}
-
-function OverlaySection() {
-  return (
-    <>
-      <Component.Button.Help
-        tooltip={STATIC.DATA.GLOBAL_HELP_TOOLTIP}
-        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
-      />
-      <Component.Button.Settings
-        tooltip={STATIC.DATA.GLOBAL_SETTINGS_TOOLTIP}
-        size={STATIC.CONSTANT.SCALE_FLOAT_ICON}
-      />
-      <div className={GlobalClasses.version}>{DEV.VERSION}</div>
-    </>
   );
 }
 
@@ -75,10 +60,10 @@ function PlayerNameSection(props) {
     <>
       <div className={GlobalClasses.expand}>
         <label htmlFor="playername" className={GlobalClasses.label}>
-          {STATIC.DATA.CREATION_PAGE_SUBTITLE_1}
+          {data.CREATION_PAGE_SUBTITLE_1}
         </label>
       </div>
-      <Component.Textbox.PlayerName input={props.input} />
+      <Component.PlayerNameTextBox input={props.input} />
     </>
   );
 }
@@ -88,11 +73,11 @@ function PlayerModeSection(props) {
     <div className={GlobalClasses.mode_container}>
       <div>
         <label className={GlobalClasses.wrapper + " " + GlobalClasses.label}>
-          {STATIC.DATA.CREATION_PAGE_SUBTITLE_2}
+          {data.CREATION_PAGE_SUBTITLE_2}
         </label>
       </div>
       <div className={Classes.subsubtitleContainer}>
-        <Component.Form.ModeSelector input={props.input} />
+        <Component.ModeSelectorForm input={props.input} />
       </div>
     </div>
   );
@@ -104,7 +89,7 @@ function PlayerRepresentorSection(props) {
       <label className={GlobalClasses.wrapper + " " + GlobalClasses.label}>
         Player Represent
       </label>
-      <Component.Form.Representor input={props.input} />
+      <Component.RepresentorForm input={props.input} />
     </>
   );
 }
@@ -139,9 +124,9 @@ function ActionSection(props) {
   return (
     <>
       <div className={GlobalClasses.buttonContainer}>
-        <Component.Button.Text
+        <Component.SubmitButton
           event={validate}
-          text={STATIC.DATA.CREATION_PAGE_BTNTEXT}
+          text={data.CREATION_PAGE_BTNTEXT}
         />
         {validPlayer !== "hidden" ? (
           <div className={GlobalClasses.warning_text}>{validPlayer}</div>

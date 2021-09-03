@@ -1,0 +1,18 @@
+.dice_holder {
+  position: absolute;
+  bottom: 5%;
+  right: 20%;
+  transition: transform 0.2s;
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.dice_holder:hover {
+  transform: scale(1.1);
+}
+
+.diceSize {
+  width: 10vh;
+  height: 10vh;
+}

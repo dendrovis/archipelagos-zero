@@ -1,14 +1,14 @@
-/** React Package */
+/** React Packages */
 import { useHistory } from "react-router-dom";
 
 /** Styling */
 import GlobalClasses from "../common/global.module.css";
 
-/** Component Package */
+/** Component Packages */
 import * as Component from "../components/index";
 
 /** Common Packages */
-import data from "../common/data";
+import * as data from "../common/data";
 
 /** Debug */
 import * as DEV from "../config/debug";

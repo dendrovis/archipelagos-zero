@@ -1,9 +1,13 @@
-import React, { useState } from "react";
-import Classes from "../../css/form/representor.module.css";
-/// DEBUG
-import * as DEV from "../../config/debug";
+/** React Packages */
+import { useState } from "react";
 
-export default function Representor(props) {
+/** Styling */
+import Classes from "./RepresentorForm.module.css";
+
+/** Debug */
+import * as DEV from "../config/debug";
+
+export default function RepresentorForm(props) {
   const [selectRep1, setRep1] = useState(false);
   const [selectRep2, setRep2] = useState(false);
   const [selectRep3, setRep3] = useState(false);
