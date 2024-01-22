@@ -4,11 +4,11 @@
 
 ## What?
 
-A tasks to make a single page application (SPA) with react library. The complexity should be enough to last 2 weeks
+My On-Job-Training (OJT) end task, which is to make a single page application (SPA) with react library. The complexity must be enough to last 2 weeks
 
 ## Why?
 
-To test my frontend abilities before doing actual frontend production works given a deadline
+To test my frontend and project management abilities before doing actual frontend production works within the given deadline
 
 ## How?
 
