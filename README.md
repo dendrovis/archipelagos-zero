@@ -4,7 +4,7 @@
 
 ## What?
 
-My On-Job-Training (OJT) end task, which is to make a single page application (SPA) with react library. The complexity must be enough to last 2 weeks
+One of my internship's On-Job-Training (OJT) end task, which is to make a single page application (SPA) with react library. The complexity must be enough to last 2 weeks
 
 ## Why?
 
